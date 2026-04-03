@@ -1,5 +1,5 @@
 # render.yaml — Infrastructure-as-code for Render.com
-# Place this file in your repository root or backend folder.
+# Place this file in the root of your GitHub repo (not inside backend/).
 # Render will auto-detect it when you connect your repo.
 
 services:
@@ -8,9 +8,9 @@ services:
     env: python
     region: singapore
     plan: free
-    pythonVersion: "3.11.0"
+    runtime: python
     buildCommand: pip install -r requirements.txt
-    startCommand: gunicorn --worker-class geventwebsocket.gunicorn.workers.GeventWebSocketWorker -w 1 --bind 0.0.0.0:$PORT --timeout 120 "app:app"
+    startCommand: gunicorn --worker-class eventlet -w 1 --bind 0.0.0.0:$PORT --timeout 120 "app:app"
     healthCheckPath: /health
     envVars:
       - key: SECRET_KEY
@@ -18,7 +18,7 @@ services:
       - key: JWT_SECRET_KEY
         generateValue: true
       - key: ENCRYPTION_KEY
-        sync: false
+        sync: false          # Set manually in Render dashboard
       - key: DATABASE_URL
         fromDatabase:
           name: collabu-db
@@ -26,10 +26,18 @@ services:
       - key: ALLOWED_DOMAIN
         value: myiuc.com
       - key: FRONTEND_URL
-        sync: false
+        sync: false          # Set to your Vercel URL after deploying frontend
       - key: FLASK_ENV
         value: production
       - key: JWT_EXPIRES_DAYS
         value: "7"
       - key: MAX_UPLOAD_MB
         value: "50"
+      - key: PYTHON_VERSION
+        value: "3.11.0"
+
+databases:
+  - name: collabu-db
+    databaseName: collabu
+    user: collabu_user
+    plan: free
