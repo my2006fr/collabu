@@ -6,7 +6,7 @@ services:
   - type: web
     name: collabu-backend
     env: python
-    region: oregon          # change to your preferred region
+    region: singapore          # change to your preferred region
     plan: free              # upgrade to starter ($7/mo) for persistent disk
     buildCommand: pip install -r requirements.txt
     startCommand: gunicorn --worker-class eventlet -w 1 --bind 0.0.0.0:$PORT --timeout 120 "app:app"
@@ -23,7 +23,7 @@ services:
           name: collabu-db
           property: connectionString
       - key: ALLOWED_DOMAIN
-        value: university.edu        # change to your university domain
+        value: myiuc.com        # change to your university domain
       - key: FRONTEND_URL
         sync: false                  # set to your Vercel URL after deploying frontend
       - key: FLASK_ENV
@@ -32,9 +32,3 @@ services:
         value: "7"
       - key: MAX_UPLOAD_MB
         value: "50"
-
-databases:
-  - name: collabu-db
-    databaseName: collabu
-    user: collabu_user
-    plan: free
