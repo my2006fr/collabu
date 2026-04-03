@@ -7,6 +7,7 @@ Rooms:
 from flask_socketio import SocketIO, join_room, leave_room, emit
 from flask_jwt_extended import decode_token
 import os
+import app
 
 # CORS origin is set dynamically in app.py via socketio.init_app()
 socketio = SocketIO(app, async_mode='gevent', cors_allowed_origins="*")
