@@ -21,6 +21,8 @@ from routes.chat         import chat_bp
 from routes.posts        import posts_bp
 from routes.global_posts import gp_bp
 
+import cloudinary
+
 load_dotenv()
 migrate = Migrate()
 def create_app():
@@ -67,14 +69,23 @@ def create_app():
     }
 
     # ── Uploads ───────────────────────────────────────────────────────────────
-    app.config["UPLOAD_FOLDER"]        = os.path.join(
-        os.getcwd(), os.getenv("UPLOAD_FOLDER", "uploads")
-    )
-    max_mb = int(os.getenv("MAX_UPLOAD_MB", "50"))
-    app.config["MAX_CONTENT_LENGTH"]   = max_mb * 1024 * 1024
+    # app.config["UPLOAD_FOLDER"]        = os.path.join(
+    #     os.getcwd(), os.getenv("UPLOAD_FOLDER", "uploads")
+    # )
+    # max_mb = int(os.getenv("MAX_UPLOAD_MB", "50"))
+    # app.config["MAX_CONTENT_LENGTH"]   = max_mb * 1024 * 1024
 
-    for sub in ["avatars", "projects", "chat", "posts"]:
-        os.makedirs(os.path.join(app.config["UPLOAD_FOLDER"], sub), exist_ok=True)
+    # for sub in ["avatars", "projects", "chat", "posts"]:
+    #     os.makedirs(os.path.join(app.config["UPLOAD_FOLDER"], sub), exist_ok=True)
+    
+    # cloudinary config
+    cloudinary.config(
+        cloud_name = os.getenv("CLOUD_NAME"),
+        api_key    = os.getenv("CLOUD_API_KEY"),
+        api_secret = os.getenv("CLOUD_SECRET"),
+        secure     = True
+    )
+    
 
     # ── CORS — reads allowed origin from env ─────────────────────────────────
     frontend_url = os.getenv("FRONTEND_URL", "http://localhost:5173").rstrip("/")
