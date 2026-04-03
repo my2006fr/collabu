@@ -1,4 +1,4 @@
-libjpeg-dev
+libjepg-dev
 zlib1g-dev
 libpng-dev
 python3-dev

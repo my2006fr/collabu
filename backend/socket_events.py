@@ -6,11 +6,11 @@ Rooms:
 """
 from flask_socketio import SocketIO, join_room, leave_room, emit
 from flask_jwt_extended import decode_token
+import os
 
-# Do NOT pass the app here — it is wired up later via socketio.init_app(app) in app.py.
-# async_mode must match the monkey-patch at the top of app.py (eventlet).
-socketio = SocketIO(async_mode="eventlet", logger=False, engineio_logger=False)
-
+# Initialized without app here — socketio.init_app(app, ...) is called in app.py
+# This avoids a circular import (app.py imports socket_events, socket_events imports app)
+socketio = SocketIO(async_mode='gevent')
 
 def _user_id_from_token(token: str):
     """Decode JWT and return user id, or None if invalid."""
@@ -20,7 +20,6 @@ def _user_id_from_token(token: str):
     except Exception:
         return None
 
-
 @socketio.on("connect")
 def on_connect(auth):
     token   = (auth or {}).get("token", "")
@@ -29,13 +28,11 @@ def on_connect(auth):
         return False   # reject unauthenticated connections
     emit("connected", {"user_id": user_id})
 
-
 @socketio.on("join_project_room")
 def on_join_project(data):
     pid = data.get("project_id")
     if pid:
         join_room(f"project_{pid}")
-
 
 @socketio.on("leave_project_room")
 def on_leave_project(data):
@@ -43,11 +40,9 @@ def on_leave_project(data):
     if pid:
         leave_room(f"project_{pid}")
 
-
 @socketio.on("join_global_feed")
 def on_join_global(data):
     join_room("global_feed")
-
 
 # ── Broadcast helpers (called from HTTP route handlers) ───────────────────────
 
