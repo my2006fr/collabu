@@ -1,0 +1,48 @@
+from models import db
+from datetime import datetime
+
+class ChatMessage(db.Model):
+    __tablename__ = "chat_messages"
+
+    id            = db.Column(db.Integer, primary_key=True)
+    project_id    = db.Column(db.Integer, db.ForeignKey("projects.id"), nullable=False)
+    user_id       = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=False)
+    body          = db.Column(db.Text, default="")          # text content (can be empty if file only)
+    parent_id     = db.Column(db.Integer, db.ForeignKey("chat_messages.id"), nullable=True)  # reply
+    file_url      = db.Column(db.String(400), default="")
+    file_name     = db.Column(db.String(200), default="")
+    file_type     = db.Column(db.String(20), default="")    # image/video/audio/pdf/spreadsheet/file
+    file_size     = db.Column(db.Integer, default=0)        # bytes
+    created_at    = db.Column(db.DateTime, default=datetime.utcnow)
+    edited_at     = db.Column(db.DateTime, nullable=True)
+
+    author  = db.relationship("User", foreign_keys=[user_id])
+    replies = db.relationship(
+        "ChatMessage",
+        backref=db.backref("parent", remote_side=[id]),
+        lazy=True,
+        foreign_keys=[parent_id]
+    )
+
+    def to_dict(self, include_replies=True):
+        d = {
+            "id":         self.id,
+            "project_id": self.project_id,
+            "user_id":    self.user_id,
+            "body":       self.body,
+            "parent_id":  self.parent_id,
+            "file_url":   self.file_url,
+            "file_name":  self.file_name,
+            "file_type":  self.file_type,
+            "file_size":  self.file_size,
+            "created_at": self.created_at.isoformat(),
+            "edited_at":  self.edited_at.isoformat() if self.edited_at else None,
+            "author": {
+                "id":         self.author.id,
+                "name":       self.author.name,
+                "avatar_url": self.author.avatar_url,
+            } if self.author else None,
+        }
+        if include_replies:
+            d["replies"] = [r.to_dict(include_replies=False) for r in self.replies]
+        return d

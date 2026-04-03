@@ -1,0 +1,76 @@
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+/* ── Themes ───────────────────────────────────────────────────────────────── */
+:root, [data-theme="dark"] {
+  --bg:          #0b0b12;
+  --bg-card:     #12121c;
+  --bg-elevated: #1c1c2e;
+  --bg-hover:    #22223a;
+  --border:      #2a2a42;
+  --border-hover:#4a4a70;
+  --accent:      #7c6aff;
+  --accent-h:    #9d8fff;
+  --accent-dim:  #2d2860;
+  --success:     #22c97a;
+  --warning:     #f5a623;
+  --danger:      #ff5c6a;
+  --info:        #38bdf8;
+  --txt1:        #f0f0f8;
+  --txt2:        #8888aa;
+  --txt3:        #55556a;
+  --shadow:      0 4px 24px rgba(0,0,0,.5);
+  --radius:      14px;
+  --radius-sm:   8px;
+  --font-d:      'Syne', sans-serif;
+  --font-b:      'DM Sans', sans-serif;
+  color-scheme: dark;
+}
+[data-theme="light"] {
+  --bg:          #f4f4fb;
+  --bg-card:     #ffffff;
+  --bg-elevated: #eeeef8;
+  --bg-hover:    #e4e4f4;
+  --border:      #d0d0e8;
+  --border-hover:#a0a0cc;
+  --accent:      #5b4de0;
+  --accent-h:    #7c6aff;
+  --accent-dim:  #dddaff;
+  --txt1:        #0f0f1a;
+  --txt2:        #4a4a6a;
+  --txt3:        #9090aa;
+  --shadow:      0 4px 24px rgba(0,0,0,.08);
+  color-scheme: light;
+}
+
+html,body { height:100%; background:var(--bg); color:var(--txt1);
+  font-family:var(--font-b); font-size:15px; line-height:1.6;
+  -webkit-font-smoothing:antialiased; }
+#root { min-height:100vh; display:flex; flex-direction:column; }
+
+a { color:var(--accent-h); text-decoration:none; }
+a:hover { text-decoration:underline; }
+button,input,textarea,select { font-family:var(--font-b); }
+button { cursor:pointer; border:none; outline:none; }
+input,textarea,select { font-size:14px; }
+
+::-webkit-scrollbar { width:5px; height:5px; }
+::-webkit-scrollbar-track { background:transparent; }
+::-webkit-scrollbar-thumb { background:var(--border); border-radius:3px; }
+
+/* ── Animations ───────────────────────────────────────────────────────────── */
+@keyframes fadeUp   { from{opacity:0;transform:translateY(14px)} to{opacity:1;transform:none} }
+@keyframes spin     { to{transform:rotate(360deg)} }
+@keyframes shimmer  { 0%{background-position:-400px 0} 100%{background-position:400px 0} }
+@keyframes popIn    { 0%{transform:scale(.92);opacity:0} 100%{transform:scale(1);opacity:1} }
+
+.fade-up  { animation: fadeUp  .35s ease both; }
+.pop-in   { animation: popIn   .2s  ease both; }
+
+/* ── Priority pills ───────────────────────────────────────────────────────── */
+.pri-low      { background:rgba(34,201,122,.12);  color:#22c97a; }
+.pri-medium   { background:rgba(56,189,248,.12);  color:#38bdf8; }
+.pri-high     { background:rgba(245,166,35,.12);  color:#f5a623; }
+.pri-critical { background:rgba(255,92,106,.15);  color:#ff5c6a; }
+
+/* ── Kanban drag ghost ────────────────────────────────────────────────────── */
+.dragging { opacity:.4; }
