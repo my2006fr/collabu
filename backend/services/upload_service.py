@@ -43,17 +43,16 @@ def save_file(file, subfolder="files") -> dict:
     fname  = f"{uuid.uuid4().hex}.{ext}"
     # folder = os.path.join(current_app.config["UPLOAD_FOLDER"], subfolder)
     # os.makedirs(folder, exist_ok=True)
-    folder = subfolder
 
-    path   = os.path.join(folder, fname)
-    result = cloudinary.uploader.upload(file, folder=folder, public_id=fname.rsplit(".",1)[0], overwrite=True)
-    size   = os.path.getsize(path)
+    path   = subfolder + "/" + fname
+    result = cloudinary.uploader.upload(file, folder=path, public_id=fname.rsplit(".",1)[0], overwrite=True)
+    
     return {
         "url":           result["secure_url"],
         "original_name": file.filename,
         "ext":           ext,
         "type":          _file_type(ext),
-        "size":          size,
+        "size":          result.get("bytes", 0)
     }
 
 def save_project_file(file):
