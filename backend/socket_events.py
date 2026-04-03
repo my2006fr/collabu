@@ -9,7 +9,7 @@ from flask_jwt_extended import decode_token
 import os
 
 # CORS origin is set dynamically in app.py via socketio.init_app()
-socketio = SocketIO(async_mode="eventlet", logger=False, engineio_logger=False)
+socketio = SocketIO(app, async_mode='gevent', cors_allowed_origins="*")
 
 def _user_id_from_token(token: str):
     """Decode JWT and return user id, or None if invalid."""
