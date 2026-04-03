@@ -1,5 +1,5 @@
 import os, uuid
-from PIL import Image
+# from PIL import Image
 from flask import current_app
 import cloudinary.uploader
 
@@ -28,11 +28,11 @@ def save_avatar(file) -> str:
     # folder = os.path.join(current_app.config["UPLOAD_FOLDER"], "avatars")
     # os.makedirs(folder, exist_ok=True)
     folder = "avatars"
-    img = Image.open(file)
-    img.thumbnail((256, 256))
+    # img = Image.open(file)
+    # img.thumbnail((256, 256))
     # img.save(os.path.join(folder, fname))
     # Upload to Cloudinary
-    upload_result = cloudinary.uploader.upload(img, folder=folder, public_id=fname.rsplit(".",1)[0], overwrite=True)
+    upload_result = cloudinary.uploader.upload(file, folder=folder, public_id=fname.rsplit(".",1)[0], overwrite=True)
     return upload_result["secure_url"]  
 
 def save_file(file, subfolder="files") -> dict:
