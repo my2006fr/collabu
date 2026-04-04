@@ -343,3 +343,128 @@ export const IconNumber6 = ({ size = 32, color = "currentColor" }) => (
     <path d="M18 11a4 4 0 00-4 4v2a4 4 0 008 0 4 4 0 00-8 0" stroke={color} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
   </svg>
 );
+
+/* ── Emoji Replacements ───────────────────────────────────────────────────── */
+
+/** 👍 Like / Thumbs up */
+export const IconThumbUp = icon(c => (
+  <path d="M14 9V5a3 3 0 00-3-3l-4 9v11h11.28a2 2 0 002-1.7l1.38-9a2 2 0 00-2-2.3H14zm-7 11H5a2 2 0 01-2-2v-7a2 2 0 012-2h2v11z"
+    stroke={c} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+));
+
+/** 🔗 Share / Link */
+export const IconLink = icon(c => (
+  <>
+    <path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71" stroke={c} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+    <path d="M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71" stroke={c} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+  </>
+));
+
+/** 📎 Attach / Paperclip */
+export const IconPaperclip = icon(c => (
+  <path d="M21.44 11.05l-9.19 9.19a6 6 0 01-8.49-8.49l9.19-9.19a4 4 0 015.66 5.66l-9.2 9.19a2 2 0 01-2.83-2.83l8.49-8.48"
+    stroke={c} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+));
+
+/** 🖼️ Image / Gallery */
+export const IconImage = icon(c => (
+  <>
+    <rect x="3" y="3" width="18" height="18" rx="2" stroke={c} strokeWidth="2"/>
+    <circle cx="8.5" cy="8.5" r="1.5" fill={c}/>
+    <polyline points="21 15 16 10 5 21" stroke={c} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+  </>
+));
+
+/** 🎬 Video */
+export const IconVideo = icon(c => (
+  <>
+    <polygon points="23 7 16 12 23 17 23 7" stroke={c} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+    <rect x="1" y="5" width="15" height="14" rx="2" stroke={c} strokeWidth="2"/>
+  </>
+));
+
+/** 🎵 Audio / Music */
+export const IconMusic = icon(c => (
+  <>
+    <path d="M9 18V5l12-2v13" stroke={c} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+    <circle cx="6" cy="18" r="3" stroke={c} strokeWidth="2"/>
+    <circle cx="18" cy="16" r="3" stroke={c} strokeWidth="2"/>
+  </>
+));
+
+/** 📄 PDF / Document */
+export const IconFile = icon(c => (
+  <>
+    <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z" stroke={c} strokeWidth="2" strokeLinecap="round"/>
+    <polyline points="14 2 14 8 20 8" stroke={c} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+  </>
+));
+
+/** 📊 Spreadsheet / Chart */
+export const IconSpreadsheet = icon(c => (
+  <>
+    <rect x="3" y="3" width="18" height="18" rx="2" stroke={c} strokeWidth="2"/>
+    <line x1="3" y1="9" x2="21" y2="9" stroke={c} strokeWidth="2"/>
+    <line x1="3" y1="15" x2="21" y2="15" stroke={c} strokeWidth="2"/>
+    <line x1="9" y1="9" x2="9" y2="21" stroke={c} strokeWidth="2"/>
+    <line x1="15" y1="9" x2="15" y2="21" stroke={c} strokeWidth="2"/>
+  </>
+));
+
+/** ⭐ Star / Rating */
+export const IconStarFilled = icon(c => (
+  <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"
+    fill={c} stroke={c} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+));
+
+/** 🍴 Fork */
+export const IconFork = icon(c => (
+  <>
+    <circle cx="6" cy="6" r="2" stroke={c} strokeWidth="2"/>
+    <circle cx="18" cy="6" r="2" stroke={c} strokeWidth="2"/>
+    <circle cx="12" cy="18" r="2" stroke={c} strokeWidth="2"/>
+    <path d="M6 8v2a4 4 0 004 4h4a4 4 0 004-4V8M12 14v2" stroke={c} strokeWidth="2" strokeLinecap="round"/>
+  </>
+));
+
+/** 🐛 Bug / Issue */
+export const IconBug = icon(c => (
+  <>
+    <path d="M8 2l1.88 1.88M16 2l-1.88 1.88M9 7.13v-1a3.003 3.003 0 116 0v1" stroke={c} strokeWidth="2" strokeLinecap="round"/>
+    <path d="M12 20c-3.3 0-6-2.7-6-6v-3a6 6 0 0112 0v3c0 3.3-2.7 6-6 6z" stroke={c} strokeWidth="2" strokeLinecap="round"/>
+    <path d="M6 13H2M22 13h-4M6 17l-2 2M18 17l2 2M6 9l-2-2M18 9l2-2" stroke={c} strokeWidth="2" strokeLinecap="round"/>
+  </>
+));
+
+/** 🔧 Wrench / Skill */
+export const IconWrench = icon(c => (
+  <path d="M14.7 6.3a1 1 0 000 1.4l1.6 1.6a1 1 0 001.4 0l3.77-3.77a6 6 0 01-7.94 7.94l-6.91 6.91a2.12 2.12 0 01-3-3l6.91-6.91a6 6 0 017.94-7.94l-3.76 3.76z"
+    stroke={c} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+));
+
+/** ✅ Connected / Success check */
+export const IconCheckCircleFilled = icon(c => (
+  <>
+    <circle cx="12" cy="12" r="10" fill={c} opacity="0.15" stroke={c} strokeWidth="2"/>
+    <path d="M9 12l2 2 4-4" stroke={c} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
+  </>
+));
+
+/** ⚠️ Warning triangle filled */
+export const IconWarningFilled = icon(c => (
+  <>
+    <path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"
+      fill={c} opacity="0.15" stroke={c} strokeWidth="2"/>
+    <line x1="12" y1="9" x2="12" y2="13" stroke={c} strokeWidth="2" strokeLinecap="round"/>
+    <line x1="12" y1="17" x2="12.01" y2="17" stroke={c} strokeWidth="3" strokeLinecap="round"/>
+  </>
+));
+
+/** ℹ️ Info circle filled */
+export const IconInfoFilled = icon(c => (
+  <>
+    <circle cx="12" cy="12" r="10" fill={c} opacity="0.12" stroke={c} strokeWidth="2"/>
+    <line x1="12" y1="8" x2="12" y2="12" stroke={c} strokeWidth="2" strokeLinecap="round"/>
+    <line x1="12" y1="16" x2="12.01" y2="16" stroke={c} strokeWidth="3" strokeLinecap="round"/>
+  </>
+));

@@ -11,12 +11,12 @@ import { Avatar, Button, Alert } from '../components/FormComponents'
 import { getSocket, joinProjectRoom, leaveProjectRoom } from '../services/socket'
 
 const FILE_ICONS = {
-  image:       '🖼️',
-  video:       '🎬',
-  audio:       '🎵',
-  pdf:         '📄',
-  spreadsheet: '📊',
-  file:        '📎',
+  image:       <IconImage size={18}/>,
+  video:       <IconVideo size={18}/>,
+  audio:       <IconMusic size={18}/>,
+  pdf:         <IconFile size={18}/>,
+  spreadsheet: <IconSpreadsheet size={18}/>,
+  file:        <IconPaperclip size={18}/>,
 }
 
 function formatBytes(b) {
@@ -224,8 +224,8 @@ export default function Chat() {
           <p style={S.headerSub}>Project Chat</p>
         </div>
         <div className='chat-header-tabs' style={{marginLeft:'auto',display:'flex',gap:8}}>
-          <button onClick={() => navigate(`/projects/${id}/feed`)} style={S.tabBtn}>📋 Feed</button>
-          <button onClick={() => navigate(`/projects/${id}/gallery`)} style={S.tabBtn}>🖼️ Gallery</button>
+          <button onClick={() => navigate(`/projects/${id}/feed`)} style={S.tabBtn}><IconPost size={15} style={{marginRight:5}}/>Feed</button>
+          <button onClick={() => navigate(`/projects/${id}/gallery`)} style={S.tabBtn}><IconGallery size={15} style={{marginRight:5}}/>Gallery</button>
           <button onClick={() => navigate(`/projects/${id}/board`)} style={S.tabBtn}>🗂️ Board</button>
         </div>
       </div>
@@ -247,7 +247,7 @@ export default function Chat() {
 
         {messages.length === 0 && (
           <div style={{textAlign:'center',padding:60,color:'var(--txt3)'}}>
-            <div style={{fontSize:40,marginBottom:12}}>💬</div>
+            <div style={{marginBottom:12}}><IconChat size={48} color="var(--txt3)"/></div>
             <p>No messages yet. Start the conversation!</p>
           </div>
         )}

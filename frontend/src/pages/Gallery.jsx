@@ -3,6 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom'
 import { getProject, getGallery } from '../services/api'
 import Spinner from '../components/Spinner'
 import { Alert } from '../components/FormComponents'
+import { IconChat, IconPost, IconImage } from '../components/Icons'
 
 export default function Gallery() {
   const { id }    = useParams()
@@ -32,8 +33,8 @@ export default function Gallery() {
           <p style={S.headerSub}>Image Gallery · {images.length} image{images.length!==1?'s':''}</p>
         </div>
         <div style={{marginLeft:'auto',display:'flex',gap:8}}>
-          <button onClick={() => navigate(`/projects/${id}/chat`)} style={S.tabBtn}>💬 Chat</button>
-          <button onClick={() => navigate(`/projects/${id}/feed`)} style={S.tabBtn}>📋 Feed</button>
+          <button onClick={() => navigate(`/projects/${id}/chat`)} style={S.tabBtn}><IconChat size={14} style={{marginRight:4}}/>Chat</button>
+          <button onClick={() => navigate(`/projects/${id}/feed`)} style={S.tabBtn}><IconPost size={14} style={{marginRight:4}}/>Feed</button>
           <button onClick={() => navigate(`/projects/${id}/board`)} style={S.tabBtn}>🗂️ Board</button>
         </div>
       </div>
@@ -43,7 +44,7 @@ export default function Gallery() {
 
         {images.length === 0 && (
           <div style={{textAlign:'center',padding:80,color:'var(--txt3)'}}>
-            <div style={{fontSize:48,marginBottom:16}}>🖼️</div>
+            <div style={{marginBottom:16}}><IconImage size={56} color="var(--txt3)"/></div>
             <p style={{fontSize:15}}>No images yet.</p>
             <p style={{fontSize:13,marginTop:6}}>Images posted in the project feed will appear here.</p>
           </div>

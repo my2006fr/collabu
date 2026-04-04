@@ -8,6 +8,9 @@ import { useAuth } from '../services/AuthContext'
 import Spinner from '../components/Spinner'
 import Modal from '../components/Modal'
 import { Button, Alert, Badge, Avatar, FormGroup, Input, Textarea, Select } from '../components/FormComponents'
+import {
+  IconChat, IconPost, IconGallery, IconWrench, IconChat as IconCommentCount,
+} from '../components/Icons'
 
 const PRIORITY      = ['low','medium','high','critical']
 const PRIORITY_COLOR= { low:'success', medium:'info', high:'warning', critical:'danger' }
@@ -99,9 +102,9 @@ export default function TaskBoard() {
               + Add Task
             </Button>
           )}
-          <button onClick={()=>navigate(`/projects/${id}/chat`)}    style={S.tabBtn}>💬</button>
-          <button onClick={()=>navigate(`/projects/${id}/feed`)}    style={S.tabBtn}>📋</button>
-          <button onClick={()=>navigate(`/projects/${id}/gallery`)} style={S.tabBtn}>🖼️</button>
+          <button onClick={()=>navigate(`/projects/${id}/chat`)}    style={S.tabBtn}><IconChat size={16}/></button>
+          <button onClick={()=>navigate(`/projects/${id}/feed`)}    style={S.tabBtn}><IconPost size={16}/></button>
+          <button onClick={()=>navigate(`/projects/${id}/gallery`)} style={S.tabBtn}><IconGallery size={16}/></button>
         </div>
       </div>
 
@@ -229,7 +232,7 @@ function TaskCard({ task, isOwner, userId, onClick, onDragStart, onDragEnd }) {
       {task.required_skill && (
         <span style={{ fontSize:10, background:'var(--bg-elevated)', color:'var(--txt2)',
           padding:'2px 7px', borderRadius:4, border:'1px solid var(--border)', display:'inline-block', marginBottom:8 }}>
-          🔧 {task.required_skill}
+          <IconWrench size={13} style={{marginRight:3}}/>{task.required_skill}
         </span>
       )}
 
@@ -243,7 +246,7 @@ function TaskCard({ task, isOwner, userId, onClick, onDragStart, onDragEnd }) {
           <span style={{ fontSize:11, color:'var(--txt3)' }}>Unassigned</span>
         )}
         {task.comments_count > 0 && (
-          <span style={{ fontSize:10, color:'var(--txt3)' }}>💬 {task.comments_count}</span>
+          <span style={{ fontSize:10, color:'var(--txt3)', display:'flex', alignItems:'center', gap:3 }}><IconChat size={12}/>{task.comments_count}</span>
         )}
       </div>
     </div>
@@ -375,7 +378,7 @@ function TaskDetailModal({ task, projectId, isOwner, userId, members, onClose, o
       <div style={{display:'flex',gap:6,flexWrap:'wrap',marginBottom:14}}>
         <Badge color={PRIORITY_COLOR[task.priority]}>{task.priority}</Badge>
         <Badge color="muted">{task.status.replace(/_/g,' ')}</Badge>
-        {task.required_skill && <Badge color="muted">🔧 {task.required_skill}</Badge>}
+        {task.required_skill && <Badge color="muted"><IconWrench size={12} style={{marginRight:3}}/>{task.required_skill}</Badge>}
         {task.due_date && <Badge color={new Date(task.due_date)<new Date()?'danger':'muted'}>
           📅 {new Date(task.due_date).toLocaleDateString()}</Badge>}
       </div>

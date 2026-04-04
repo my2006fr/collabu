@@ -1,6 +1,7 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import { AuthProvider, useAuth } from './services/AuthContext'
 import { ThemeProvider } from './services/ThemeContext'
+import { LanguageProvider } from './services/LanguageContext'
 import Navbar          from './components/Navbar'
 import Spinner         from './components/Spinner'
 import Login           from './pages/Login'
@@ -58,9 +59,11 @@ export default function App() {
   return (
     <AuthProvider>
       <ThemeProvider>
-        <BrowserRouter>
-          <AppRoutes />
-        </BrowserRouter>
+        <LanguageProvider>
+          <BrowserRouter>
+            <AppRoutes />
+          </BrowserRouter>
+        </LanguageProvider>
       </ThemeProvider>
     </AuthProvider>
   )

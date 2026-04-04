@@ -6,6 +6,7 @@ import { useAuth } from '../services/AuthContext'
 import Spinner from '../components/Spinner'
 import { Button, Alert, Badge, Avatar } from '../components/FormComponents'
 import SkillBadges from '../components/SkillBadges'
+import { IconChat, IconPost, IconGallery, IconStarFilled, IconFork, IconBug } from '../components/Icons'
 
 export default function ProjectDetail() {
   const { id }    = useParams()
@@ -93,13 +94,13 @@ export default function ProjectDetail() {
             {(isOwner || myCollab?.status==='accepted') && (
               <>
                 <Button variant="secondary" style={{fontSize:13,padding:'7px 14px'}} onClick={()=>navigate(`/projects/${id}/chat`)}>
-                  💬 Chat
+                  <IconChat size={14} style={{marginRight:5}}/>Chat
                 </Button>
                 <Button variant="secondary" style={{fontSize:13,padding:'7px 14px'}} onClick={()=>navigate(`/projects/${id}/feed`)}>
-                  📋 Feed
+                  <IconPost size={14} style={{marginRight:5}}/>Feed
                 </Button>
                 <Button variant="secondary" style={{fontSize:13,padding:'7px 14px'}} onClick={()=>navigate(`/projects/${id}/gallery`)}>
-                  🖼️ Gallery
+                  <IconGallery size={14} style={{marginRight:5}}/>Gallery
                 </Button>
                 <Button variant="secondary" style={{fontSize:13,padding:'7px 14px'}} onClick={()=>navigate(`/projects/${id}/board`)}>
                   🗂️ Board
@@ -285,7 +286,7 @@ function ContributorsTab({ ghStats }) {
         <div style={{background:'var(--bg-card)',border:'1px solid var(--border)',borderRadius:'var(--radius)',padding:20}}>
           <h3 style={{fontFamily:'var(--font-d)',fontSize:15,fontWeight:700,marginBottom:12}}>{repo.full_name}</h3>
           <div style={{display:'flex',gap:20,flexWrap:'wrap'}}>
-            {[{l:'⭐ Stars',v:repo.stars},{l:'🍴 Forks',v:repo.forks},{l:'🐛 Issues',v:repo.open_issues},{l:'💬 Language',v:repo.language||'—'}].map(({l,v})=>(
+            {[{l:<><IconStarFilled size={14} style={{marginRight:3}}/>Stars</>,v:repo.stars},{l:<><IconFork size={14} style={{marginRight:3}}/>Forks</>,v:repo.forks},{l:<><IconBug size={14} style={{marginRight:3}}/>Issues</>,v:repo.open_issues},{l:<><IconChat size={14} style={{marginRight:3}}/>Language</>,v:repo.language||'—'}].map(({l,v})=>(
               <div key={l}><span style={{fontSize:12,color:'var(--txt3)'}}>{l} </span><strong style={{color:'var(--txt1)'}}>{v}</strong></div>
             ))}
           </div>

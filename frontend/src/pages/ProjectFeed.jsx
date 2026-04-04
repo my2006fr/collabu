@@ -4,8 +4,19 @@ import { getProject, getPosts, createPost, deletePost } from '../services/api'
 import { useAuth } from '../services/AuthContext'
 import Spinner from '../components/Spinner'
 import { Avatar, Button, Alert } from '../components/FormComponents'
+import {
+  IconImage, IconVideo, IconMusic, IconFile, IconSpreadsheet, IconPaperclip,
+  IconChat, IconGallery, IconPost, IconMusic as IconAudio,
+} from '../components/Icons'
 
-const FILE_ICONS = { image:'🖼️', video:'🎬', audio:'🎵', pdf:'📄', spreadsheet:'📊', file:'📎' }
+const FILE_ICON_MAP = {
+  image:       <IconImage size={18}/>,
+  video:       <IconVideo size={18}/>,
+  audio:       <IconMusic size={18}/>,
+  pdf:         <IconFile size={18}/>,
+  spreadsheet: <IconSpreadsheet size={18}/>,
+  file:        <IconPaperclip size={18}/>,
+}
 
 function formatBytes(b) {
   if (!b) return ''
@@ -111,8 +122,8 @@ export default function ProjectFeed() {
           <p style={S.headerSub}>Project Feed</p>
         </div>
         <div style={{marginLeft:'auto',display:'flex',gap:8}}>
-          <button onClick={() => navigate(`/projects/${id}/chat`)}    style={S.tabBtn}>💬 Chat</button>
-          <button onClick={() => navigate(`/projects/${id}/gallery`)} style={S.tabBtn}>🖼️ Gallery</button>
+          <button onClick={() => navigate(`/projects/${id}/chat`)}    style={S.tabBtn}><IconChat size={14} style={{marginRight:4}}/>Chat</button>
+          <button onClick={() => navigate(`/projects/${id}/gallery`)} style={S.tabBtn}><IconGallery size={14} style={{marginRight:4}}/>Gallery</button>
           <button onClick={() => navigate(`/projects/${id}/board`)}   style={S.tabBtn}>🗂️ Board</button>
         </div>
       </div>
@@ -146,7 +157,7 @@ export default function ProjectFeed() {
                   )}
                   {p.type === 'audio' && (
                     <div style={S.previewFile}>
-                      <span style={{fontSize:24}}>🎵</span>
+                      <IconMusic size={28} color="var(--accent)"/>
                       <span style={{fontSize:11,color:'var(--txt2)'}}>{p.name}</span>
                     </div>
                   )}
@@ -167,7 +178,7 @@ export default function ProjectFeed() {
               <input ref={fileRef} type="file" multiple style={{display:'none'}} onChange={pickFiles}
                 accept="image/*,video/*,audio/*,.pdf,.xlsx,.xls,.csv,.docx,.txt,.zip"/>
               <button type="button" onClick={() => fileRef.current?.click()} style={S.attachBtn} title="Attach files">
-                📎 Attach
+                <IconPaperclip size={14} style={{marginRight:4}}/>Attach
               </button>
             </div>
             <Button type="submit" loading={posting} disabled={posting || (!body.trim() && files.length===0)}
@@ -181,7 +192,7 @@ export default function ProjectFeed() {
         <div style={{display:'flex',flexDirection:'column',gap:14,marginTop:20}}>
           {posts.length === 0 && (
             <div style={{textAlign:'center',padding:60,color:'var(--txt3)'}}>
-              <div style={{fontSize:40,marginBottom:12}}>📋</div>
+              <div style={{marginBottom:12}}><IconPost size={48} color="var(--txt3)"/></div>
               <p>No posts yet. Share an update with your team!</p>
             </div>
           )}
@@ -247,7 +258,7 @@ function PostCard({ post, userId, onDelete }) {
           {others.map(att => (
             <a key={att.id} href={att.file_url} target="_blank" rel="noreferrer" style={{textDecoration:'none'}}>
               <div style={S.fileRow}>
-                <span style={{fontSize:22}}>{FILE_ICONS[att.file_type]||FILE_ICONS.file}</span>
+                <span style={{fontSize:22}}>{FILE_ICON_MAP[att.file_type]||FILE_ICONS.file}</span>
                 <div style={{flex:1,minWidth:0}}>
                   <div style={{fontSize:13,fontWeight:600,color:'var(--txt1)',
                     overflow:'hidden',textOverflow:'ellipsis',whiteSpace:'nowrap'}}>{att.file_name}</div>

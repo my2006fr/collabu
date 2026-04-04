@@ -7,8 +7,19 @@ import { useAuth } from '../services/AuthContext'
 import { getSocket, joinGlobalFeed } from '../services/socket'
 import Spinner from '../components/Spinner'
 import { Avatar, Button, Alert, Badge } from '../components/FormComponents'
+import {
+  IconImage, IconVideo, IconMusic, IconFile, IconSpreadsheet, IconPaperclip,
+  IconThumbUp, IconChat, IconLink,
+} from '../components/Icons'
 
-const FILE_ICONS = { image:'🖼️', video:'🎬', audio:'🎵', pdf:'📄', spreadsheet:'📊', file:'📎' }
+const FILE_ICON_MAP = {
+  image:       <IconImage size={18}/>,
+  video:       <IconVideo size={18}/>,
+  audio:       <IconMusic size={18}/>,
+  pdf:         <IconFile size={18}/>,
+  spreadsheet: <IconSpreadsheet size={18}/>,
+  file:        <IconPaperclip size={18}/>,
+}
 const fmt = b => !b ? '' : b < 1024 ? `${b} B` : b < 1048576 ? `${(b/1024).toFixed(1)} KB` : `${(b/1048576).toFixed(1)} MB`
 const ago = iso => {
   const s = Math.floor((Date.now() - new Date(iso)) / 1000)
@@ -172,7 +183,7 @@ export default function GlobalFeed() {
             <div style={{ display:'flex', gap:8 }}>
               <input ref={fileRef} type="file" multiple style={{display:'none'}} onChange={pickFiles}
                 accept="image/*,video/*,audio/*,.pdf,.xlsx,.xls,.csv,.docx,.txt,.zip"/>
-              <button type="button" onClick={()=>fileRef.current?.click()} style={S.attachBtn}>📎 Attach</button>
+              <button type="button" onClick={()=>fileRef.current?.click()} style={S.attachBtn}><IconPaperclip size={15} style={{marginRight:4}}/>Attach</button>
             </div>
             <Button type="submit" loading={posting} disabled={posting||(!body.trim()&&!files.length)}
               style={{padding:'8px 24px'}}>
@@ -320,7 +331,7 @@ function PostCard({ post, userId, onLike, onDelete, onShare }) {
           {others.map(att => (
             <a key={att.id} href={att.file_url} target="_blank" rel="noreferrer" style={{textDecoration:'none'}}>
               <div style={S.fileRow}>
-                <span style={{fontSize:22}}>{FILE_ICONS[att.file_type]||FILE_ICONS.file}</span>
+                <span style={{fontSize:22}}>{FILE_ICON_MAP[att.file_type]||FILE_ICONS.file}</span>
                 <div style={{flex:1, minWidth:0}}>
                   <div style={{fontSize:13, fontWeight:600, color:'var(--txt1)',
                     overflow:'hidden', textOverflow:'ellipsis', whiteSpace:'nowrap'}}>{att.file_name}</div>
@@ -337,17 +348,17 @@ function PostCard({ post, userId, onLike, onDelete, onShare }) {
       <div style={{ display:'flex', gap:0, borderTop:'1px solid var(--border)', paddingTop:10, marginTop:2 }}>
         <ActionBtn
           onClick={onLike}
-          icon="👍"
+          icon={<IconThumbUp size={16}/>}
           label={`Like${post.likes_count > 0 ? ` · ${post.likes_count}` : ''}`}
           color="var(--accent)"
           active={post.liked_by_me}
         />
         <ActionBtn
           onClick={loadComments}
-          icon="💬"
+          icon={<IconChat size={16}/>}
           label={`Comment${post.comments_count > 0 ? ` · ${post.comments_count}` : ''}`}
         />
-        <ActionBtn onClick={onShare} icon="🔗" label="Share" />
+        <ActionBtn onClick={onShare} icon={<IconLink size={16}/>} label="Share" />
       </div>
 
       {/* Comments section */}

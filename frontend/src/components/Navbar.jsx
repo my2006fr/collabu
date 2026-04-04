@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { Link, useNavigate, useLocation } from 'react-router-dom'
 import { useAuth } from '../services/AuthContext'
 import { useTheme } from '../services/ThemeContext'
+import { useLanguage } from '../services/LanguageContext'
 import { Avatar } from './FormComponents'
 import {
   IconHexLogo, IconFeed, IconProjects, IconGuide,
@@ -11,6 +12,7 @@ import {
 export default function Navbar() {
   const { user, logout } = useAuth()
   const { theme, setTheme } = useTheme()
+  const { t } = useLanguage()
   const navigate  = useNavigate()
   const loc       = useLocation()
   const [open, setOpen] = useState(false)
@@ -19,9 +21,9 @@ export default function Navbar() {
   const close     = () => setOpen(false)
 
   const links = [
-    { to: '/feed',            icon: <IconFeed     size={15} />, label: 'Feed'     },
-    { to: '/dashboard',       icon: <IconProjects size={15} />, label: 'Projects' },
-    { to: '/getting-started', icon: <IconGuide    size={15} />, label: 'Guide'    },
+    { to: '/feed',            icon: <IconFeed     size={15} />, label: t('Feed')     },
+    { to: '/dashboard',       icon: <IconProjects size={15} />, label: t('Dashboard') },
+    { to: '/getting-started', icon: <IconGuide    size={15} />, label: t('Guide')    },
   ]
 
   return (
@@ -79,7 +81,7 @@ export default function Navbar() {
               padding: '6px 12px', borderRadius: 7, background: 'transparent',
               color: 'var(--txt3)', fontSize: 13, border: '1px solid var(--border)', cursor: 'pointer',
             }}>
-            <IconLogout size={14} color="var(--txt3)" /> Logout
+            <IconLogout size={14} color="var(--txt3)" /> {t('Logout')}
           </button>
 
           {/* Hamburger — shown only on mobile via CSS */}
@@ -159,7 +161,7 @@ export default function Navbar() {
               <span style={{ width: 24, display:'flex', alignItems:'center', justifyContent:'center' }}>
                 <IconProfile size={18} color="var(--txt2)" />
               </span>
-              Profile & Settings
+              {t('Profile')} & Settings
             </Link>
 
             <div style={{ height: 1, background: 'var(--border)', margin: '6px 0' }} />
@@ -176,7 +178,7 @@ export default function Navbar() {
               <span style={{ width: 24, display:'flex', alignItems:'center', justifyContent:'center' }}>
                 {theme === 'dark' ? <IconSun size={18} color="var(--txt2)" /> : <IconMoon size={18} color="var(--txt2)" />}
               </span>
-              {theme === 'dark' ? 'Switch to Light' : 'Switch to Dark'}
+              {theme === 'dark' ? t('Light') : t('Dark')}
             </button>
 
             {/* Logout */}
@@ -193,7 +195,7 @@ export default function Navbar() {
               <span style={{ width: 24, display:'flex', alignItems:'center', justifyContent:'center' }}>
                 <IconLogout size={18} color="var(--danger)" />
               </span>
-              Logout
+              {t('Logout')}
             </button>
           </div>
         </div>

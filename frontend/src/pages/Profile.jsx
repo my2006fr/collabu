@@ -6,13 +6,16 @@ import {
 } from '../services/api'
 import { useAuth } from '../services/AuthContext'
 import { useTheme } from '../services/ThemeContext'
+import { useLanguage } from '../services/LanguageContext'
 import { FormGroup, Input, Textarea, Select, Button, Alert, Avatar, Badge } from '../components/FormComponents'
+import { IconCheckCircleFilled, IconWarningFilled, IconInfoFilled } from '../components/Icons'
 
 const TABS = ['profile','security','github','preferences']
 
 export default function Profile() {
   const { user, refresh } = useAuth()
   const { theme, setTheme } = useTheme()
+  const { lang, setLang, t } = useLanguage()
   const navigate = useNavigate()
   const fileRef  = useRef()
 
@@ -28,7 +31,7 @@ export default function Profile() {
     level:           user?.level           || 'beginner',
     github_username: user?.github_username || '',
     theme:           user?.theme           || 'dark',
-    language:        user?.language        || 'en',
+    language:        localStorage.getItem('language') || user?.language || 'en',
   })
   const [pw, setPw]   = useState({ current_password:'', new_password:'' })
   const [pat, setPat] = useState('')
@@ -46,6 +49,7 @@ export default function Profile() {
     try {
       await updateProfile(f)
       setTheme(f.theme)
+      setLang(f.language)
       await refresh()
       flash('Profile updated!')
     } catch(e) { flash(e.message, true) }
@@ -135,12 +139,12 @@ export default function Profile() {
           background:'var(--bg-card)', border:'1px solid var(--border)',
           borderRadius:10, padding:4,
         }}>
-          {TABS.map(t => (
-            <button key={t} onClick={() => setTab(t)} style={{
+          {TABS.map(tabKey => (
+            <button key={tabKey} onClick={() => setTab(tabKey)} style={{
               flex:1, padding:'7px 0', borderRadius:7, fontSize:13, fontWeight:600,
               border:'none', cursor:'pointer',
-              background: tab===t ? 'var(--accent)' : 'transparent',
-              color:      tab===t ? '#fff'          : 'var(--txt2)',
+              background: tab===tabKey ? 'var(--accent)' : 'transparent',
+              color:      tab===tabKey ? '#fff'          : 'var(--txt2)',
             }}>
               {t.charAt(0).toUpperCase()+t.slice(1)}
             </button>
@@ -158,18 +162,18 @@ export default function Profile() {
           {/* ── Profile ── */}
           {tab==='profile' && (
             <form onSubmit={saveProfile} style={{display:'flex',flexDirection:'column',gap:16}}>
-              <FormGroup label="Display Name">
+              <FormGroup label={t("Display Name")}>
                 <Input name="name" value={f.name} onChange={set} required/>
               </FormGroup>
-              <FormGroup label="Bio">
+              <FormGroup label={t("Bio")}>
                 <Textarea name="bio" value={f.bio} onChange={set}
                   placeholder="Tell others about yourself…" style={{minHeight:70}}/>
               </FormGroup>
-              <FormGroup label="Skills" hint="Comma-separated — used for task assignment matching">
+              <FormGroup label={t("Skills")} hint="Comma-separated — used for task assignment matching">
                 <Input name="skills" value={f.skills} onChange={set}
                   placeholder="Python, React, Machine Learning, UX Design…"/>
               </FormGroup>
-              <FormGroup label="Experience Level">
+              <FormGroup label={t("Experience Level")}>
                 <Select name="level" value={f.level} onChange={set}>
                   <option value="beginner">Beginner</option>
                   <option value="intermediate">Intermediate</option>
@@ -177,7 +181,7 @@ export default function Profile() {
                 </Select>
               </FormGroup>
               <div style={{paddingTop:12,borderTop:'1px solid var(--border)',display:'flex',justifyContent:'flex-end'}}>
-                <Button type="submit" loading={busy} disabled={busy}>Save Changes</Button>
+                <Button type="submit" loading={busy} disabled={busy}>{t('Save Changes')}</Button>
               </div>
             </form>
           )}
@@ -185,16 +189,16 @@ export default function Profile() {
           {/* ── Security ── */}
           {tab==='security' && (
             <form onSubmit={savePw} style={{display:'flex',flexDirection:'column',gap:16}}>
-              <FormGroup label="Current Password">
+              <FormGroup label={t("Current Password")}>
                 <Input type="password" name="current_password"
                   value={pw.current_password} onChange={setPw_} required/>
               </FormGroup>
-              <FormGroup label="New Password" hint="At least 6 characters">
+              <FormGroup label={t("New Password")} hint="At least 6 characters">
                 <Input type="password" name="new_password"
                   value={pw.new_password} onChange={setPw_} required minLength={6}/>
               </FormGroup>
               <div style={{paddingTop:12,borderTop:'1px solid var(--border)',display:'flex',justifyContent:'flex-end'}}>
-                <Button type="submit" loading={busy} disabled={busy}>Update Password</Button>
+                <Button type="submit" loading={busy} disabled={busy}>{t('Update Password')}</Button>
               </div>
             </form>
           )}
@@ -208,7 +212,7 @@ export default function Profile() {
                 borderRadius:10,padding:16}}>
                 {user?.github_username ? (
                   <div style={{display:'flex',alignItems:'center',gap:12}}>
-                    <span style={{fontSize:28}}>✅</span>
+                    <IconCheckCircleFilled size={32} color="var(--success)"/>
                     <div>
                       <p style={{fontSize:14,fontWeight:700,color:'var(--txt1)',marginBottom:2}}>
                         Connected as <strong>@{user.github_username}</strong>
@@ -222,7 +226,7 @@ export default function Profile() {
                   </div>
                 ) : (
                   <div style={{display:'flex',alignItems:'center',gap:12}}>
-                    <span style={{fontSize:28}}>⚠️</span>
+                    <IconWarningFilled size={32} color="var(--warning)"/>
                     <p style={{fontSize:13,color:'var(--txt2)'}}>
                       Not connected. Add your GitHub username and PAT below.
                     </p>
@@ -234,7 +238,7 @@ export default function Profile() {
               <div style={{background:'rgba(124,106,255,.06)',border:'1px solid var(--accent-dim)',
                 borderRadius:10,padding:14}}>
                 <p style={{fontSize:12,fontWeight:700,color:'var(--accent-h)',marginBottom:6}}>
-                  ℹ️ How GitHub integration works
+                  <IconInfoFilled size={14} style={{marginRight:5, verticalAlign:"middle"}}/>How GitHub integration works
                 </p>
                 <ul style={{fontSize:12,color:'var(--txt2)',paddingLeft:16,display:'flex',flexDirection:'column',gap:4}}>
                   <li>When you request to join a project, the platform uses the <strong>project owner's PAT</strong> to invite you as a GitHub collaborator.</li>
@@ -245,7 +249,7 @@ export default function Profile() {
               </div>
 
               {/* Enter username */}
-              <FormGroup label="GitHub Username">
+              <FormGroup label={t("GitHub Username")}>
                 <Input name="github_username" value={f.github_username}
                   onChange={set} placeholder="your-github-username"/>
                 <Button variant="secondary" style={{marginTop:8,alignSelf:'flex-start'}}
@@ -294,15 +298,15 @@ export default function Profile() {
           {/* ── Preferences ── */}
           {tab==='preferences' && (
             <form onSubmit={saveProfile} style={{display:'flex',flexDirection:'column',gap:16}}>
-              <FormGroup label="Theme">
+              <FormGroup label={t("Theme")}>
                 <Select name="theme" value={f.theme}
                   onChange={e=>{ set(e); setTheme(e.target.value) }}>
                   <option value="dark">🌙 Dark</option>
                   <option value="light">☀️ Light</option>
                 </Select>
               </FormGroup>
-              <FormGroup label="Language">
-                <Select name="language" value={f.language} onChange={set}>
+              <FormGroup label={t("Language")}>
+                <Select name="language" value={f.language} onChange={e=>{ set(e); setLang(e.target.value) }}>
                   <option value="en">🇬🇧 English</option>
                   <option value="fr">🇫🇷 Français</option>
                   <option value="es">🇪🇸 Español</option>
@@ -312,7 +316,7 @@ export default function Profile() {
                 </Select>
               </FormGroup>
               <div style={{paddingTop:12,borderTop:'1px solid var(--border)',display:'flex',justifyContent:'flex-end'}}>
-                <Button type="submit" loading={busy} disabled={busy}>Save Preferences</Button>
+                <Button type="submit" loading={busy} disabled={busy}>{t('Save Preferences')}</Button>
               </div>
             </form>
           )}
