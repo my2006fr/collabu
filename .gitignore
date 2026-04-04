@@ -1,2 +1,22 @@
-frontend/node_modules/
+node_modules/
+# Environment variables
+.env
+.env.*
+.env.local
+.env.production
+.env.development
 
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.venv/
+venv/
+*.egg-info/
+
+# Uploads (if stored locally)
+uploads/
+
+# OS files
+.DS_Store
+Thumbs.db
