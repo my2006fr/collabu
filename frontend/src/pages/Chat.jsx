@@ -4,9 +4,11 @@ import {
   getProject, getChatMessages, sendChatMessage,
   sendChatFile, editChatMessage, deleteChatMessage
 } from '../services/api'
+
 import { useAuth } from '../services/AuthContext'
 import Spinner from '../components/Spinner'
 import { Avatar, Button, Alert } from '../components/FormComponents'
+import { getSocket, joinProjectRoom, leaveProjectRoom } from '../services/socket'
 
 const FILE_ICONS = {
   image:       '🖼️',
