@@ -258,7 +258,7 @@ function PostCard({ post, userId, onDelete }) {
           {others.map(att => (
             <a key={att.id} href={att.file_url} target="_blank" rel="noreferrer" style={{textDecoration:'none'}}>
               <div style={S.fileRow}>
-                <span style={{fontSize:22}}>{FILE_ICON_MAP[att.file_type]||FILE_ICONS.file}</span>
+                <span style={{fontSize:22}}>{FILE_ICONS[att.file_type]||FILE_ICONS.file}</span>
                 <div style={{flex:1,minWidth:0}}>
                   <div style={{fontSize:13,fontWeight:600,color:'var(--txt1)',
                     overflow:'hidden',textOverflow:'ellipsis',whiteSpace:'nowrap'}}>{att.file_name}</div>

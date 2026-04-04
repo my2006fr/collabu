@@ -20,6 +20,7 @@ const FILE_ICONS = {
   spreadsheet: <IconSpreadsheet size={18}/>,
   file:        <IconPaperclip size={18}/>,
 }
+FILE_ICON_MAP
 const fmt = b => !b ? '' : b < 1024 ? `${b} B` : b < 1048576 ? `${(b/1024).toFixed(1)} KB` : `${(b/1048576).toFixed(1)} MB`
 const ago = iso => {
   const s = Math.floor((Date.now() - new Date(iso)) / 1000)
@@ -331,7 +332,7 @@ function PostCard({ post, userId, onLike, onDelete, onShare }) {
           {others.map(att => (
             <a key={att.id} href={att.file_url} target="_blank" rel="noreferrer" style={{textDecoration:'none'}}>
               <div style={S.fileRow}>
-                <span style={{fontSize:22}}>{FILE_ICON_MAP[att.file_type]||FILE_ICONS.file}</span>
+                <span style={{fontSize:22}}>{FILE_ICONS[att.file_type]||FILE_ICONS.file}</span>
                 <div style={{flex:1, minWidth:0}}>
                   <div style={{fontSize:13, fontWeight:600, color:'var(--txt1)',
                     overflow:'hidden', textOverflow:'ellipsis', whiteSpace:'nowrap'}}>{att.file_name}</div>
