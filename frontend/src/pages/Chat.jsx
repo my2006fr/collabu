@@ -8,6 +8,10 @@ import {
 import { useAuth } from '../services/AuthContext'
 import Spinner from '../components/Spinner'
 import { Avatar, Button, Alert } from '../components/FormComponents'
+import {
+  IconImage, IconVideo, IconMusic, IconFile, IconSpreadsheet, IconPaperclip,
+  IconChat, IconGallery, IconPost,
+} from '../components/Icons'
 import { getSocket, joinProjectRoom, leaveProjectRoom } from '../services/socket'
 
 const FILE_ICONS = {

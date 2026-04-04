@@ -9,7 +9,7 @@ import Spinner from '../components/Spinner'
 import Modal from '../components/Modal'
 import { Button, Alert, Badge, Avatar, FormGroup, Input, Textarea, Select } from '../components/FormComponents'
 import {
-  IconChat, IconPost, IconGallery, IconWrench, IconChat as IconCommentCount,
+  IconChat, IconPost, IconGallery, IconWrench,
 } from '../components/Icons'
 
 const PRIORITY      = ['low','medium','high','critical']
