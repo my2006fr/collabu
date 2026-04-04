@@ -146,7 +146,7 @@ export default function Profile() {
               background: tab===tabKey ? 'var(--accent)' : 'transparent',
               color:      tab===tabKey ? '#fff'          : 'var(--txt2)',
             }}>
-              {t.charAt(0).toUpperCase()+t.slice(1)}
+              {t && t.charAt(0).toUpperCase()+ t.slice(1)}
             </button>
           ))}
         </div>
