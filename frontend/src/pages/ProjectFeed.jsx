@@ -6,10 +6,10 @@ import Spinner from '../components/Spinner'
 import { Avatar, Button, Alert } from '../components/FormComponents'
 import {
   IconImage, IconVideo, IconMusic, IconFile, IconSpreadsheet, IconPaperclip,
-  IconChat, IconGallery, IconPost,FILE_ICONS
+  IconChat, IconGallery, IconPost,
 } from '../components/Icons'
 
-const FILE_ICON_MAP = {
+const FILE_ICONS = {
   image:       <IconImage size={18}/>,
   video:       <IconVideo size={18}/>,
   audio:       <IconMusic size={18}/>,
