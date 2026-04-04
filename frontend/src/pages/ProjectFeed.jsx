@@ -6,7 +6,7 @@ import Spinner from '../components/Spinner'
 import { Avatar, Button, Alert } from '../components/FormComponents'
 import {
   IconImage, IconVideo, IconMusic, IconFile, IconSpreadsheet, IconPaperclip,
-  IconChat, IconGallery, IconPost,
+  IconChat, IconGallery, IconPost,FILE_ICONS
 } from '../components/Icons'
 
 const FILE_ICON_MAP = {
