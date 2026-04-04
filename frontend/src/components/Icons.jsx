@@ -39,10 +39,12 @@ export const IconHexLogo = ({ size = 28, color = "currentColor" }) => (
 );
 
 export const IconGithub = icon(c => (
+  <>
   <path
     d="M12 2C6.477 2 2 6.477 2 12c0 4.418 2.865 8.166 6.839 9.489.5.092.682-.217.682-.482 0-.237-.009-.868-.013-1.703-2.782.604-3.369-1.342-3.369-1.342-.454-1.155-1.11-1.462-1.11-1.462-.908-.62.069-.608.069-.608 1.003.07 1.531 1.03 1.531 1.03.892 1.529 2.341 1.087 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.11-4.555-4.943 0-1.091.39-1.984 1.029-2.683-.103-.253-.446-1.27.098-2.647 0 0 .84-.268 2.75 1.026A9.578 9.578 0 0112 6.836c.85.004 1.705.114 2.504.336 1.909-1.294 2.747-1.026 2.747-1.026.546 1.377.202 2.394.1 2.647.64.699 1.028 1.592 1.028 2.683 0 3.842-2.339 4.687-4.566 4.935.359.309.678.919.678 1.852 0 1.336-.012 2.415-.012 2.743 0 .267.18.578.688.48C19.138 20.163 22 16.418 22 12c0-5.523-4.477-10-10-10z"
     fill={c}
   />
+  </>
 ));
 
 /* ── Navigation ──────────────────────────────────────────────────────────── */
@@ -81,28 +83,40 @@ export const IconSun = icon(c => (
 ));
 
 export const IconMoon = icon(c => (
+  <>
   <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z" stroke={c} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+  </>
 ));
 
 export const IconMenu = icon(c => (
-  <path d="M3 12h18M3 6h18M3 18h18" stroke={c} strokeWidth="2" strokeLinecap="round"/>
+    <>
+      <path d="M3 12h18M3 6h18M3 18h18" stroke={c} strokeWidth="2" strokeLinecap="round"/>
+    </>
 ));
 
 export const IconClose = icon(c => (
-  <path d="M18 6L6 18M6 6l12 12" stroke={c} strokeWidth="2" strokeLinecap="round"/>
+  <>
+    <path d="M18 6L6 18M6 6l12 12" stroke={c} strokeWidth="2" strokeLinecap="round"/>
+  </>
 ));
 
 export const IconChevronRight = icon(c => (
+  <>
   <path d="M9 18l6-6-6-6" stroke={c} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+  </>
 ));
 
 export const IconArrowLeft = icon(c => (
-  <path d="M19 12H5M12 19l-7-7 7-7" stroke={c} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+  <>
+    <path d="M19 12H5M12 19l-7-7 7-7" stroke={c} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+  </>
 ));
 
 /* ── Actions ─────────────────────────────────────────────────────────────── */
 export const IconPlus = icon(c => (
+  <>
   <path d="M12 5v14M5 12h14" stroke={c} strokeWidth="2" strokeLinecap="round"/>
+  </>
 ));
 
 export const IconEdit = icon(c => (
@@ -119,11 +133,15 @@ export const IconTrash = icon(c => (
 ));
 
 export const IconCheck = icon(c => (
+  <>
   <path d="M20 6L9 17l-5-5" stroke={c} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+  </>
 ));
 
 export const IconX = icon(c => (
-  <path d="M18 6L6 18M6 6l12 12" stroke={c} strokeWidth="2" strokeLinecap="round"/>
+  <>
+    <path d="M18 6L6 18M6 6l12 12" stroke={c} strokeWidth="2" strokeLinecap="round"/>
+  </>
 ));
 
 export const IconSearch = icon(c => (
@@ -142,7 +160,9 @@ export const IconUpload = icon(c => (
 ));
 
 export const IconSend = icon(c => (
+  <>
   <path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z" stroke={c} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+  </>
 ));
 
 export const IconCopy = icon(c => (
@@ -234,7 +254,9 @@ export const IconSkill = icon(c => (
 ));
 
 export const IconBolt = icon(c => (
+  <>
   <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" stroke={c} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+  </>
 ));
 
 export const IconGlobe = icon(c => (
@@ -246,7 +268,9 @@ export const IconGlobe = icon(c => (
 ));
 
 export const IconCode = icon(c => (
-  <path d="M16 18l6-6-6-6M8 6l-6 6 6 6" stroke={c} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+  <>
+    <path d="M16 18l6-6-6-6M8 6l-6 6 6 6" stroke={c} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+  </>
 ));
 
 export const IconCalendar = icon(c => (
@@ -348,8 +372,10 @@ export const IconNumber6 = ({ size = 32, color = "currentColor" }) => (
 
 /** 👍 Like / Thumbs up */
 export const IconThumbUp = icon(c => (
+  <>
   <path d="M14 9V5a3 3 0 00-3-3l-4 9v11h11.28a2 2 0 002-1.7l1.38-9a2 2 0 00-2-2.3H14zm-7 11H5a2 2 0 01-2-2v-7a2 2 0 012-2h2v11z"
     stroke={c} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+  </>
 ));
 
 /** 🔗 Share / Link */
@@ -362,8 +388,10 @@ export const IconLink = icon(c => (
 
 /** 📎 Attach / Paperclip */
 export const IconPaperclip = icon(c => (
+  <>
   <path d="M21.44 11.05l-9.19 9.19a6 6 0 01-8.49-8.49l9.19-9.19a4 4 0 015.66 5.66l-9.2 9.19a2 2 0 01-2.83-2.83l8.49-8.48"
     stroke={c} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+  </>
 ));
 
 /** 🖼️ Image / Gallery */
@@ -413,8 +441,10 @@ export const IconSpreadsheet = icon(c => (
 
 /** ⭐ Star / Rating */
 export const IconStarFilled = icon(c => (
+  <>
   <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"
     fill={c} stroke={c} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+  </>
 ));
 
 /** 🍴 Fork */
@@ -438,8 +468,10 @@ export const IconBug = icon(c => (
 
 /** 🔧 Wrench / Skill */
 export const IconWrench = icon(c => (
-  <path d="M14.7 6.3a1 1 0 000 1.4l1.6 1.6a1 1 0 001.4 0l3.77-3.77a6 6 0 01-7.94 7.94l-6.91 6.91a2.12 2.12 0 01-3-3l6.91-6.91a6 6 0 017.94-7.94l-3.76 3.76z"
-    stroke={c} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+  <>
+    <path d="M14.7 6.3a1 1 0 000 1.4l1.6 1.6a1 1 0 001.4 0l3.77-3.77a6 6 0 01-7.94 7.94l-6.91 6.91a2.12 2.12 0 01-3-3l6.91-6.91a6 6 0 017.94-7.94l-3.76 3.76z"
+      stroke={c} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+  </>
 ));
 
 /** ✅ Connected / Success check */
