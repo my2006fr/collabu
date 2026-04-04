@@ -106,7 +106,7 @@ export default function TaskBoard() {
       </div>
 
       {/* ── Kanban ── */}
-      <div style={{flex:1, overflowX:'auto', padding:'16px 20px', display:'flex', gap:14, alignItems:'flex-start'}}>
+      <div className='board-scroll-hint' style={{flex:1, overflowX:'auto', overflowY:'hidden', padding:'12px 14px', display:'flex', gap:12, alignItems:'flex-start', WebkitOverflowScrolling:'touch', scrollSnapType:'x mandatory'}}>
         {columns.map(col => (
           <KanbanColumn
             key={col} col={col} colKey={colKey(col)}
@@ -150,7 +150,7 @@ function KanbanColumn({ col, tasks, isOwner, userId, onAddTask, onSelectTask,
                         onDragStart, onDragEnd, onDrop, onDragOver }) {
   const [over, setOver] = useState(false)
   return (
-    <div style={{ width:272, flexShrink:0, display:'flex', flexDirection:'column' }}>
+    <div style={{ width:'min(272px, 82vw)', flexShrink:0, display:'flex', flexDirection:'column', scrollSnapAlign:'start' }}>
       <div style={{ display:'flex', alignItems:'center', justifyContent:'space-between', marginBottom:10, padding:'0 2px' }}>
         <div style={{ display:'flex', alignItems:'center', gap:7 }}>
           <span style={{ fontSize:13, fontWeight:700, color:'var(--txt1)' }}>{col}</span>
@@ -286,7 +286,7 @@ function CreateTaskModal({ projectId, initialStatus, columns, colKey, members, o
           <Textarea name="description" value={f.description} onChange={set}
             placeholder="Details, acceptance criteria…" style={{minHeight:70}}/>
         </FormGroup>
-        <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:12}}>
+        <div className='form-row-2' style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:12}}>
           <FormGroup label="Column">
             <Select name="status" value={f.status} onChange={set}>
               {columns.map(c=><option key={c} value={colKey(c)}>{c}</option>)}
@@ -509,7 +509,7 @@ function CommentBlock({ c, userId, projectId, taskId, onReply, onDeleted }) {
 const S = {
   header:{display:'flex',alignItems:'center',gap:12,padding:'12px 20px',
     borderBottom:'1px solid var(--border)',background:'var(--bg-card)',flexShrink:0,flexWrap:'wrap'},
-  title:{fontFamily:'var(--font-d)',fontSize:18,fontWeight:800,margin:0,
+  title:{fontFamily:'var(--font-d)',fontSize:'clamp(15px,4vw,18px)',fontWeight:800,margin:0,
     overflow:'hidden',textOverflow:'ellipsis',whiteSpace:'nowrap'},
   backBtn:{background:'none',border:'none',color:'var(--txt2)',fontSize:18,cursor:'pointer',padding:'4px 8px',flexShrink:0},
   tabBtn:{background:'var(--bg-elevated)',border:'1px solid var(--border)',color:'var(--txt2)',

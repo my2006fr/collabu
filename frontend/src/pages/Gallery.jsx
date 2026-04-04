@@ -38,7 +38,7 @@ export default function Gallery() {
         </div>
       </div>
 
-      <div style={{maxWidth:1100,margin:'0 auto',padding:'24px 16px'}}>
+      <div style={{maxWidth:1100,margin:'0 auto',padding:'clamp(12px,3vw,24px) clamp(10px,4vw,16px)'}}>
         {err && <Alert>{err}</Alert>}
 
         {images.length === 0 && (
@@ -50,7 +50,7 @@ export default function Gallery() {
         )}
 
         {/* Masonry-style grid */}
-        <div style={S.grid}>
+        <div style={S.grid} className='gallery-grid'>
           {images.map((img, i) => (
             <div key={img.id} onClick={() => setSelected(img)}
               style={{...S.gridItem, animationDelay:`${i*0.04}s`}} className="fade-up">
@@ -117,7 +117,7 @@ const S = {
   backBtn:     { background:'none', border:'none', color:'var(--txt2)', fontSize:18, cursor:'pointer', padding:'4px 8px' },
   tabBtn:      { background:'var(--bg-elevated)', border:'1px solid var(--border)', color:'var(--txt2)',
                  borderRadius:7, padding:'5px 12px', fontSize:12, cursor:'pointer', fontWeight:500 },
-  grid: { display:'grid', gridTemplateColumns:'repeat(auto-fill,minmax(180px,1fr))', gap:8 },
+  grid: { display:'grid', gridTemplateColumns:'repeat(auto-fill,minmax(130px,1fr))', gap:6 },
   gridItem: {
     aspectRatio:'1', borderRadius:10, overflow:'hidden', cursor:'zoom-in',
     position:'relative', background:'var(--bg-elevated)',

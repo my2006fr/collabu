@@ -1,6 +1,6 @@
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-/* ── Themes ───────────────────────────────────────────────────────────────── */
+/* ── Themes ─────────────────────────────────────────────────────────────── */
 :root, [data-theme="dark"] {
   --bg:          #0b0b12;
   --bg-card:     #12121c;
@@ -23,6 +23,7 @@
   --radius-sm:   8px;
   --font-d:      'Syne', sans-serif;
   --font-b:      'DM Sans', sans-serif;
+  --nav-h:       56px;
   color-scheme: dark;
 }
 [data-theme="light"] {
@@ -42,35 +43,253 @@
   color-scheme: light;
 }
 
-html,body { height:100%; background:var(--bg); color:var(--txt1);
-  font-family:var(--font-b); font-size:15px; line-height:1.6;
-  -webkit-font-smoothing:antialiased; }
-#root { min-height:100vh; display:flex; flex-direction:column; }
+html, body {
+  height: 100%;
+  background: var(--bg);
+  color: var(--txt1);
+  font-family: var(--font-b);
+  font-size: 15px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  /* prevent horizontal scroll on mobile */
+  overflow-x: hidden;
+}
+#root { min-height: 100vh; display: flex; flex-direction: column; }
 
-a { color:var(--accent-h); text-decoration:none; }
-a:hover { text-decoration:underline; }
-button,input,textarea,select { font-family:var(--font-b); }
-button { cursor:pointer; border:none; outline:none; }
-input,textarea,select { font-size:14px; }
+a { color: var(--accent-h); text-decoration: none; }
+a:hover { text-decoration: underline; }
+button, input, textarea, select { font-family: var(--font-b); }
+button { cursor: pointer; border: none; outline: none; }
+input, textarea, select { font-size: 14px; }
 
-::-webkit-scrollbar { width:5px; height:5px; }
-::-webkit-scrollbar-track { background:transparent; }
-::-webkit-scrollbar-thumb { background:var(--border); border-radius:3px; }
+/* iOS momentum scrolling */
+.scroll-area { -webkit-overflow-scrolling: touch; }
 
-/* ── Animations ───────────────────────────────────────────────────────────── */
-@keyframes fadeUp   { from{opacity:0;transform:translateY(14px)} to{opacity:1;transform:none} }
-@keyframes spin     { to{transform:rotate(360deg)} }
-@keyframes shimmer  { 0%{background-position:-400px 0} 100%{background-position:400px 0} }
-@keyframes popIn    { 0%{transform:scale(.92);opacity:0} 100%{transform:scale(1);opacity:1} }
+::-webkit-scrollbar { width: 4px; height: 4px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
 
-.fade-up  { animation: fadeUp  .35s ease both; }
-.pop-in   { animation: popIn   .2s  ease both; }
+/* ── Animations ──────────────────────────────────────────────────────────── */
+@keyframes fadeUp { from{opacity:0;transform:translateY(14px)} to{opacity:1;transform:none} }
+@keyframes spin   { to{transform:rotate(360deg)} }
+@keyframes popIn  { 0%{transform:scale(.92);opacity:0} 100%{transform:scale(1);opacity:1} }
 
-/* ── Priority pills ───────────────────────────────────────────────────────── */
-.pri-low      { background:rgba(34,201,122,.12);  color:#22c97a; }
-.pri-medium   { background:rgba(56,189,248,.12);  color:#38bdf8; }
-.pri-high     { background:rgba(245,166,35,.12);  color:#f5a623; }
-.pri-critical { background:rgba(255,92,106,.15);  color:#ff5c6a; }
+.fade-up { animation: fadeUp .35s ease both; }
+.pop-in  { animation: popIn  .2s  ease both; }
 
-/* ── Kanban drag ghost ────────────────────────────────────────────────────── */
-.dragging { opacity:.4; }
+/* ── Priority pills ──────────────────────────────────────────────────────── */
+.pri-low      { background: rgba(34,201,122,.12); color: #22c97a; }
+.pri-medium   { background: rgba(56,189,248,.12); color: #38bdf8; }
+.pri-high     { background: rgba(245,166,35,.12); color: #f5a623; }
+.pri-critical { background: rgba(255,92,106,.15); color: #ff5c6a; }
+
+/* ── Responsive layout helpers ──────────────────────────────────────────── */
+/* Page wrapper used by most pages */
+.page-wrap {
+  min-height: calc(100vh - var(--nav-h));
+  background: var(--bg);
+  padding: 28px 24px;
+}
+.page-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* Responsive 2-col → 1-col layout (ProjectDetail, Profile…) */
+.two-col {
+  display: grid;
+  grid-template-columns: 1fr 280px;
+  gap: 20px;
+  align-items: start;
+}
+
+/* Responsive grid used by Dashboard */
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 14px;
+}
+
+/* ── Breakpoints ─────────────────────────────────────────────────────────── */
+
+/* Tablet  ≤ 768px */
+@media (max-width: 768px) {
+  .page-wrap  { padding: 16px 14px; }
+
+  .two-col {
+    grid-template-columns: 1fr;
+  }
+  .two-col .sticky-aside {
+    position: static;
+  }
+
+  .card-grid {
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  }
+
+  /* Hide text labels in secondary nav buttons */
+  .btn-icon-only span.btn-label { display: none; }
+}
+
+/* Mobile  ≤ 480px */
+@media (max-width: 480px) {
+  html, body { font-size: 14px; }
+
+  .page-wrap  { padding: 12px 10px; }
+
+  .card-grid  { grid-template-columns: 1fr; }
+
+  /* Make all modals full-width */
+  .modal-inner {
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 0 !important;
+    border-radius: var(--radius) var(--radius) 0 0 !important;
+    align-self: flex-end !important;
+  }
+  .modal-outer {
+    align-items: flex-end !important;
+    padding: 0 !important;
+  }
+}
+
+/* ── Navbar responsive ───────────────────────────────────────────────────── */
+@media (max-width: 640px) {
+  /* Hide desktop links + logout + profile name on mobile */
+  nav .desktop-links,
+  nav .logout-btn,
+  nav .profile-name { display: none !important; }
+
+  /* Show hamburger */
+  nav .hamburger-btn { display: flex !important; }
+
+  /* Profile chip — only show avatar, no text */
+  nav .profile-chip span { display: none; }
+}
+
+/* ── Two-column pages → stack on tablet ──────────────────────────────────── */
+@media (max-width: 768px) {
+  .two-col {
+    display: flex !important;
+    flex-direction: column !important;
+  }
+  .sticky-aside { position: static !important; }
+}
+
+/* ── ProjectDetail action buttons wrap on mobile ─────────────────────────── */
+@media (max-width: 480px) {
+  .project-actions { flex-direction: column !important; }
+  .project-actions button,
+  .project-actions a { width: 100% !important; justify-content: center; }
+}
+
+/* ── Safe-area insets (iPhone notch / home bar) ──────────────────────────── */
+@supports (padding: max(0px)) {
+  nav { padding-top: env(safe-area-inset-top); }
+  .page-wrap { padding-bottom: max(12px, env(safe-area-inset-bottom)); }
+  .chat-composer { padding-bottom: max(10px, env(safe-area-inset-bottom)); }
+}
+
+/* ── Smooth tap highlight removal ────────────────────────────────────────── */
+button, a, [role="button"] {
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
+
+/* ── Prevent font zoom on input focus (iOS) ─────────────────────────────── */
+input, textarea, select {
+  font-size: max(16px, 1em);
+}
+@media (min-width: 481px) {
+  input, textarea, select { font-size: 14px; }
+}
+
+/* ── Navbar responsive rules ─────────────────────────────────────────────── */
+.nav-desktop-links   { display: flex; }
+.nav-logout-btn      { display: flex; }
+.nav-profile-name    { display: inline; }
+.nav-hamburger       { display: none; }
+
+@media (max-width: 640px) {
+  .nav-desktop-links  { display: none !important; }
+  .nav-logout-btn     { display: none !important; }
+  .nav-profile-name   { display: none !important; }
+  .nav-hamburger      { display: flex !important; }
+}
+
+/* ── Responsive two-column → single column ───────────────────────────────── */
+@media (max-width: 768px) {
+  .two-col {
+    grid-template-columns: 1fr !important;
+    display: grid !important;
+  }
+  .sticky-aside { position: static !important; top: auto !important; }
+}
+
+/* ── Task board column hint on mobile ───────────────────────────────────── */
+@media (max-width: 600px) {
+  .board-scroll-hint::after {
+    content: '← swipe to see more columns →';
+    display: block;
+    text-align: center;
+    font-size: 11px;
+    color: var(--txt3);
+    padding: 6px 0 0;
+    letter-spacing: .3px;
+  }
+}
+
+/* ── Project action buttons stack on small screens ──────────────────────── */
+@media (max-width: 500px) {
+  .project-action-btns {
+    flex-direction: column !important;
+    width: 100%;
+  }
+  .project-action-btns button {
+    width: 100% !important;
+    justify-content: center !important;
+  }
+}
+
+/* ── Forms: 2-col grid → 1-col on mobile ────────────────────────────────── */
+@media (max-width: 480px) {
+  .form-row-2 {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+/* ── Modal full-screen on mobile ────────────────────────────────────────── */
+@media (max-width: 500px) {
+  .modal-outer {
+    align-items: flex-end !important;
+    padding: 0 !important;
+  }
+  .modal-inner {
+    max-width: 100% !important;
+    width: 100% !important;
+    border-radius: 16px 16px 0 0 !important;
+    max-height: 92vh !important;
+  }
+}
+
+/* ── Chat page ────────────────────────────────────────────────────────────── */
+@media (max-width: 480px) {
+  .chat-header-tabs { display: none !important; }
+  .chat-bubble-mine  { max-width: 88% !important; }
+  .chat-bubble-other { max-width: 88% !important; }
+}
+
+/* ── Gallery grid ────────────────────────────────────────────────────────── */
+@media (max-width: 380px) {
+  .gallery-grid { grid-template-columns: repeat(2, 1fr) !important; }
+}
+
+/* ── Profile tabs ────────────────────────────────────────────────────────── */
+@media (max-width: 400px) {
+  .profile-tabs button { font-size: 11px !important; padding: 6px 4px !important; }
+}
+
+/* ── Hide secondary text in small stat cards ─────────────────────────────── */
+@media (max-width: 360px) {
+  .stat-label { display: none; }
+}

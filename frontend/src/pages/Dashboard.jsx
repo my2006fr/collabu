@@ -29,20 +29,20 @@ export default function Dashboard() {
   })
 
   return (
-    <div style={{minHeight:'calc(100vh - 58px)',background:'var(--bg)',padding:'28px 24px'}}>
+    <div style={{minHeight:'calc(100vh - 56px)',background:'var(--bg)',padding:'clamp(12px,3vw,28px) clamp(10px,4vw,24px)'}}>
       <div style={{maxWidth:1200,margin:'0 auto'}} className="fade-up">
 
         {/* Header */}
         <div style={{display:'flex',justifyContent:'space-between',alignItems:'flex-start',marginBottom:24,flexWrap:'wrap',gap:12}}>
           <div>
-            <h1 style={{fontFamily:'var(--font-d)',fontSize:30,fontWeight:800}}>Projects</h1>
+            <h1 style={{fontFamily:'var(--font-d)',fontSize:'clamp(22px,5vw,30px)',fontWeight:800}}>Projects</h1>
             <p style={{color:'var(--txt2)',fontSize:14,marginTop:3}}>Hey {user?.name?.split(' ')[0]} 👋 — discover or start a collaboration</p>
           </div>
           <Button onClick={()=>navigate('/projects/new')}>+ New Project</Button>
         </div>
 
         {/* Search + filter */}
-        <div style={{display:'flex',gap:10,marginBottom:20,flexWrap:'wrap'}}>
+        <div style={{display:'flex',gap:8,marginBottom:20,flexWrap:'wrap',overflowX:'auto',paddingBottom:4}}>
           <input value={search} onChange={e=>setSearch(e.target.value)} placeholder="Search projects, skills…"
             style={{flex:1,minWidth:220,background:'var(--bg-card)',border:'1px solid var(--border)',
               borderRadius:8,padding:'9px 14px',color:'var(--txt1)',fontSize:14,outline:'none'}}/>
@@ -64,9 +64,9 @@ export default function Dashboard() {
             {label:'Active', val:projects.filter(p=>p.status==='active').length},
           ].map(({label,val})=>(
             <div key={label} style={{background:'var(--bg-card)',border:'1px solid var(--border)',
-              borderRadius:10,padding:'10px 20px',display:'flex',flexDirection:'column',gap:2}}>
+              borderRadius:10,padding:'8px 14px',display:'flex',flexDirection:'column',gap:2}}>
               <span style={{fontFamily:'var(--font-d)',fontSize:22,fontWeight:800,color:'var(--accent-h)'}}>{val}</span>
-              <span style={{fontSize:11,color:'var(--txt3)',fontWeight:600,textTransform:'uppercase',letterSpacing:'.4px'}}>{label}</span>
+              <span className='stat-label' style={{fontSize:11,color:'var(--txt3)',fontWeight:600,textTransform:'uppercase',letterSpacing:'.4px'}}>{label}</span>
             </div>
           ))}
         </div>
@@ -82,7 +82,7 @@ export default function Dashboard() {
           </div>
         )}
 
-        <div style={{display:'grid',gridTemplateColumns:'repeat(auto-fill,minmax(300px,1fr))',gap:14}}>
+        <div className='card-grid'>
           {filtered.map(p=><ProjectCard key={p.id} p={p} uid={user?.id}/>)}
         </div>
       </div>

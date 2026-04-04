@@ -117,7 +117,7 @@ export default function ProjectFeed() {
         </div>
       </div>
 
-      <div style={{maxWidth:680,margin:'0 auto',padding:'24px 16px'}}>
+      <div style={{maxWidth:680,margin:'0 auto',width:'100%',padding:'clamp(12px,3vw,24px) clamp(10px,4vw,16px)'}}>
         {err && <div style={{marginBottom:12}}><Alert>{err}</Alert></div>}
         {msg && <div style={{marginBottom:12}}><Alert type="success">{msg}</Alert></div>}
 
@@ -273,7 +273,7 @@ function PostCard({ post, userId, onDelete }) {
 
 const imageGrid = (count) => ({
   display: 'grid',
-  gridTemplateColumns: count === 1 ? '1fr' : count === 2 ? '1fr 1fr' : 'repeat(3,1fr)',
+  gridTemplateColumns: count === 1 ? '1fr' : count === 2 ? '1fr 1fr' : 'repeat(auto-fit,minmax(100px,1fr))',
   gap: 4,
   marginBottom: 4,
 })

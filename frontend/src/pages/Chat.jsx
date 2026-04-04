@@ -221,7 +221,7 @@ export default function Chat() {
           <h2 style={S.headerTitle}>{project?.title}</h2>
           <p style={S.headerSub}>Project Chat</p>
         </div>
-        <div style={{marginLeft:'auto',display:'flex',gap:8}}>
+        <div className='chat-header-tabs' style={{marginLeft:'auto',display:'flex',gap:8}}>
           <button onClick={() => navigate(`/projects/${id}/feed`)} style={S.tabBtn}>📋 Feed</button>
           <button onClick={() => navigate(`/projects/${id}/gallery`)} style={S.tabBtn}>🖼️ Gallery</button>
           <button onClick={() => navigate(`/projects/${id}/board`)} style={S.tabBtn}>🗂️ Board</button>
@@ -263,7 +263,7 @@ export default function Chat() {
       </div>
 
       {/* ── Composer ── */}
-      <div style={S.composer}>
+      <div style={S.composer} className='chat-composer'>
         {/* Reply banner */}
         {replyTo && (
           <div style={S.replyBanner}>
@@ -485,13 +485,14 @@ function FileAttachment({ msg, isMine }) {
 // ── Styles ────────────────────────────────────────────────────────────────────
 const S = {
   page: {
-    height: 'calc(100vh - 58px)',
+    height: 'calc(100vh - 56px)',
     display: 'flex',
     flexDirection: 'column',
     background: 'var(--bg)',
     maxWidth: 1000,
     margin: '0 auto',
     width: '100%',
+    minWidth: 0,
   },
   header: {
     display: 'flex',
@@ -581,8 +582,9 @@ const S = {
   },
   inputRow: {
     display: 'flex',
-    gap: 8,
+    gap: 6,
     alignItems: 'flex-end',
+    minWidth: 0,
   },
   attachBtn: {
     background: 'var(--bg-elevated)',
@@ -596,6 +598,7 @@ const S = {
   },
   textInput: {
     flex: 1,
+    minWidth: 0,
     background: 'var(--bg-elevated)',
     border: '1px solid var(--border)',
     borderRadius: 8,

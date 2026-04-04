@@ -135,9 +135,9 @@ export default function GlobalFeed() {
   }
 
   return (
-    <div style={{ minHeight: 'calc(100vh - 56px)', background: 'var(--bg)', padding: '24px 16px' }}>
-      <div style={{ maxWidth: 660, margin: '0 auto' }}>
-        <h1 style={{ fontFamily:'var(--font-d)', fontSize:26, fontWeight:800, marginBottom:20 }}>
+    <div style={{ minHeight: 'calc(100vh - 56px)', background: 'var(--bg)', padding: 'clamp(12px,3vw,24px) clamp(10px,4vw,16px)' }}>
+      <div style={{ maxWidth: 660, margin: '0 auto', width: '100%' }}>
+        <h1 style={{ fontFamily:'var(--font-d)', fontSize:'clamp(20px,5vw,26px)', fontWeight:800, marginBottom:16 }}>
           Community Feed
         </h1>
 
@@ -300,7 +300,7 @@ function PostCard({ post, userId, onLike, onDelete, onShare }) {
       {images.length > 0 && (
         <div style={{
           display:'grid',
-          gridTemplateColumns: images.length===1 ? '1fr' : images.length===2 ? '1fr 1fr' : 'repeat(3,1fr)',
+          gridTemplateColumns: images.length===1 ? '1fr' : images.length===2 ? '1fr 1fr' : 'repeat(auto-fit,minmax(100px,1fr))',
           gap:4, marginBottom:12, borderRadius:10, overflow:'hidden',
         }}>
           {images.map(img => (

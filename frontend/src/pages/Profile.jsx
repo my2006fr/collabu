@@ -91,8 +91,8 @@ export default function Profile() {
   }
 
   return (
-    <div style={{ minHeight:'calc(100vh - 56px)', background:'var(--bg)', padding:'28px 16px' }}>
-      <div style={{ maxWidth:680, margin:'0 auto' }} className="fade-up">
+    <div style={{ minHeight:'calc(100vh - 56px)', background:'var(--bg)', padding:'clamp(12px,3vw,28px) clamp(10px,4vw,16px)' }}>
+      <div style={{ maxWidth:680, margin:'0 auto', width:'100%' }} className="fade-up">
         <h1 style={{ fontFamily:'var(--font-d)', fontSize:26, fontWeight:800, marginBottom:4 }}>Settings</h1>
         <p style={{ color:'var(--txt2)', fontSize:13, marginBottom:24 }}>
           Manage your account, skills, GitHub integration and preferences.
@@ -102,7 +102,7 @@ export default function Profile() {
         <div style={{
           background:'var(--bg-card)', border:'1px solid var(--border)',
           borderRadius:'var(--radius)', padding:20, marginBottom:18,
-          display:'flex', alignItems:'center', gap:18,
+          display:'flex', alignItems:'center', gap:14, flexWrap:'wrap',
         }}>
           <div style={{ position:'relative' }}>
             <Avatar url={user?.avatar_url} name={user?.name||'?'} size={70}/>
@@ -130,7 +130,7 @@ export default function Profile() {
         </div>
 
         {/* Tab nav */}
-        <div style={{
+        <div className='profile-tabs' style={{
           display:'flex', gap:2, marginBottom:18,
           background:'var(--bg-card)', border:'1px solid var(--border)',
           borderRadius:10, padding:4,

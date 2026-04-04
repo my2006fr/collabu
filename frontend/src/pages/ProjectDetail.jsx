@@ -62,7 +62,7 @@ export default function ProjectDetail() {
   const pct      = progress?.completion_pct ?? 0
 
   return (
-    <div style={{minHeight:'calc(100vh - 58px)',background:'var(--bg)',padding:'28px 24px'}}>
+    <div style={{minHeight:'calc(100vh - 56px)',background:'var(--bg)',padding:'clamp(12px,3vw,28px) clamp(10px,4vw,24px)'}}>
       <div style={{maxWidth:1100,margin:'0 auto'}} className="fade-up">
         <button onClick={()=>navigate('/dashboard')}
           style={{background:'none',border:'none',color:'var(--txt2)',fontSize:13,marginBottom:20,cursor:'pointer'}}>
@@ -71,7 +71,7 @@ export default function ProjectDetail() {
 
         {/* Cover */}
         {project.cover_image_url && (
-          <div style={{width:'100%',height:220,borderRadius:'var(--radius)',overflow:'hidden',marginBottom:24,border:'1px solid var(--border)'}}>
+          <div style={{width:'100%',height:'clamp(140px,25vw,220px)',borderRadius:'var(--radius)',overflow:'hidden',marginBottom:24,border:'1px solid var(--border)'}}>
             <img src={project.cover_image_url} alt="" style={{width:'100%',height:'100%',objectFit:'cover'}}/>
           </div>
         )}
@@ -84,12 +84,12 @@ export default function ProjectDetail() {
               {isOwner && <Badge color="success">Your Project</Badge>}
               <Badge color={project.status==='active'?'info':'warning'}>{project.status}</Badge>
             </div>
-            <h1 style={{fontFamily:'var(--font-d)',fontSize:30,fontWeight:800,lineHeight:1.2}}>{project.title}</h1>
+            <h1 style={{fontFamily:'var(--font-d)',fontSize:'clamp(20px,5vw,30px)',fontWeight:800,lineHeight:1.2}}>{project.title}</h1>
             <p style={{color:'var(--txt2)',fontSize:13,marginTop:6}}>
               by <strong>{project.owner?.name}</strong> · {new Date(project.created_at).toLocaleDateString()}
             </p>
           </div>
-          <div style={{display:'flex',gap:8,flexWrap:'wrap'}}>
+          <div className='project-action-btns' style={{display:'flex',gap:8,flexWrap:'wrap'}}>
             {(isOwner || myCollab?.status==='accepted') && (
               <>
                 <Button variant="secondary" style={{fontSize:13,padding:'7px 14px'}} onClick={()=>navigate(`/projects/${id}/chat`)}>
@@ -146,7 +146,7 @@ export default function ProjectDetail() {
         </div>
 
         {tab==='overview' && (
-          <div style={{display:'grid',gridTemplateColumns:'1fr 280px',gap:18,alignItems:'start'}}>
+          <div className='two-col'>
             <div style={{display:'flex',flexDirection:'column',gap:16}}>
 
               <Section title="Description">
@@ -201,7 +201,7 @@ export default function ProjectDetail() {
             </div>
 
             {/* Sidebar */}
-            <aside style={{position:'sticky',top:70}}>
+            <aside style={{position:'sticky',top:70}} className='sticky-aside'>
               <div style={{background:'var(--bg-card)',border:'1px solid var(--border)',borderRadius:'var(--radius)',padding:20,display:'flex',flexDirection:'column',gap:14}}>
                 {!isOwner && !myCollab && (
                   <>

@@ -34,13 +34,13 @@ export default function CreateProject() {
   }
 
   return (
-    <div style={{minHeight:'calc(100vh - 58px)',background:'var(--bg)',padding:'28px 24px'}}>
-      <div style={{maxWidth:680,margin:'0 auto'}} className="fade-up">
+    <div style={{minHeight:'calc(100vh - 56px)',background:'var(--bg)',padding:'clamp(12px,3vw,28px) clamp(10px,4vw,24px)'}}>
+      <div style={{maxWidth:680,margin:'0 auto',width:'100%'}} className="fade-up">
         <button onClick={()=>navigate('/dashboard')}
           style={{background:'none',border:'none',color:'var(--txt2)',fontSize:13,marginBottom:20,cursor:'pointer'}}>
           ← Back
         </button>
-        <h1 style={{fontFamily:'var(--font-d)',fontSize:28,fontWeight:800,marginBottom:4}}>Create a Project</h1>
+        <h1 style={{fontFamily:'var(--font-d)',fontSize:'clamp(20px,5vw,28px)',fontWeight:800,marginBottom:4}}>Create a Project</h1>
         <p style={{color:'var(--txt2)',fontSize:14,marginBottom:24}}>Post your idea and find collaborators</p>
 
         <div style={{background:'var(--bg-card)',border:'1px solid var(--border)',borderRadius:'var(--radius)',padding:28}}>
@@ -68,7 +68,7 @@ export default function CreateProject() {
               <Textarea name="description" placeholder="Describe your project, goals, what you're building…"
                 value={f.description} onChange={set} required style={{minHeight:110}}/>
             </FormGroup>
-            <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:14}}>
+            <div style={{display:'grid',gridTemplateColumns:'repeat(auto-fit,minmax(200px,1fr))',gap:14}}>
               <FormGroup label="Required Skills" hint="Comma-separated">
                 <Input name="required_skills" placeholder="Python, React, NLP" value={f.required_skills} onChange={set}/>
               </FormGroup>

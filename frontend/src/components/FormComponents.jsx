@@ -12,7 +12,7 @@ export function FormGroup({ label, error, hint, children }) {
 const inputBase = {
   background:'var(--bg-elevated)', border:'1px solid var(--border)',
   borderRadius:'var(--radius-sm)', color:'var(--txt1)',
-  padding:'10px 14px', fontSize:14, width:'100%', outline:'none',
+  padding:'11px 14px', fontSize:14, width:'100%', outline:'none', minHeight:42,
   transition:'border-color .15s',
 }
 
@@ -31,7 +31,7 @@ export function Button({ variant='primary', style, loading, children, ...p }) {
   return (
     <button style={{padding:'10px 20px',borderRadius:'var(--radius-sm)',fontSize:14,fontWeight:600,
       cursor:p.disabled?'not-allowed':'pointer',opacity:p.disabled?.6:1,transition:'all .15s',border:'none',
-      display:'inline-flex',alignItems:'center',justifyContent:'center',gap:6,...variants[variant],...style}} {...p}>
+      display:'inline-flex',alignItems:'center',justifyContent:'center',gap:6,touchAction:'manipulation',...variants[variant],...style}} {...p}>
       {loading ? <span style={{width:14,height:14,border:'2px solid currentColor',borderTopColor:'transparent',borderRadius:'50%',animation:'spin .6s linear infinite',display:'inline-block'}}/> : children}
     </button>
   )
