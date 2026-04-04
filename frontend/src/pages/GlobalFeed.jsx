@@ -20,7 +20,7 @@ const FILE_ICONS = {
   spreadsheet: <IconSpreadsheet size={18}/>,
   file:        <IconPaperclip size={18}/>,
 }
-FILE_ICON_MAP
+
 const fmt = b => !b ? '' : b < 1024 ? `${b} B` : b < 1048576 ? `${(b/1024).toFixed(1)} KB` : `${(b/1048576).toFixed(1)} MB`
 const ago = iso => {
   const s = Math.floor((Date.now() - new Date(iso)) / 1000)
