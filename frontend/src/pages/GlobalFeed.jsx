@@ -12,7 +12,7 @@ import {
   IconThumbUp, IconChat, IconLink,
 } from '../components/Icons'
 
-const FILE_ICON_MAP = {
+const FILE_ICONS = {
   image:       <IconImage size={18}/>,
   video:       <IconVideo size={18}/>,
   audio:       <IconMusic size={18}/>,
