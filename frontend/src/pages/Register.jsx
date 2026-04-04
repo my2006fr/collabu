@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import { register } from '../services/api'
 import { useAuth } from '../services/AuthContext'
 import { FormGroup, Input, Select, Button, Alert } from '../components/FormComponents'
+import { IconHexLogo } from '../components/Icons'
 
 export default function Register() {
   const { storeAuth } = useAuth()
@@ -22,7 +23,9 @@ export default function Register() {
     <div style={S.page}>
       <div style={S.box} className="fade-up">
         <div style={{textAlign:'center',marginBottom:28}}>
-          <div style={{fontSize:38,color:'var(--accent)'}}>⬡</div>
+          <div style={{display:'flex',justifyContent:'center',marginBottom:6}}>
+            <IconHexLogo size={42} color="var(--accent)" />
+          </div>
           <h1 style={{fontFamily:'var(--font-d)',fontSize:26,fontWeight:800,marginTop:6}}>Join CollabU</h1>
           <p style={{color:'var(--txt2)',fontSize:13,marginTop:4}}>University students only — .edu emails</p>
         </div>

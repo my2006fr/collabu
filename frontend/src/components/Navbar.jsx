@@ -3,6 +3,10 @@ import { Link, useNavigate, useLocation } from 'react-router-dom'
 import { useAuth } from '../services/AuthContext'
 import { useTheme } from '../services/ThemeContext'
 import { Avatar } from './FormComponents'
+import {
+  IconHexLogo, IconFeed, IconProjects, IconGuide,
+  IconProfile, IconSun, IconMoon, IconLogout,
+} from './Icons'
 
 export default function Navbar() {
   const { user, logout } = useAuth()
@@ -15,8 +19,9 @@ export default function Navbar() {
   const close     = () => setOpen(false)
 
   const links = [
-    { to: '/feed',      emoji: '🌐', label: 'Feed'     },
-    { to: '/dashboard', emoji: '📁', label: 'Projects' },
+    { to: '/feed',            icon: <IconFeed     size={15} />, label: 'Feed'     },
+    { to: '/dashboard',       icon: <IconProjects size={15} />, label: 'Projects' },
+    { to: '/getting-started', icon: <IconGuide    size={15} />, label: 'Guide'    },
   ]
 
   return (
@@ -26,13 +31,15 @@ export default function Navbar() {
 
           {/* Logo */}
           <Link to="/feed" style={logoStyle} onClick={close}>
-            <span style={{ color: 'var(--accent)', fontSize: 20 }}>⬡</span>CollabU
+            <IconHexLogo size={22} color="var(--accent)" />
+            CollabU
           </Link>
 
           {/* Desktop nav links — hidden on mobile via CSS class */}
           <div className="nav-desktop-links" style={{ display:'flex', gap:2 }}>
-            {links.map(({ to, emoji, label }) => (
+            {links.map(({ to, icon, label }) => (
               <Link key={to} to={to} style={{
+                display: 'flex', alignItems: 'center', gap: 6,
                 padding: '5px 12px', borderRadius: 7,
                 fontSize: 13, fontWeight: 500,
                 textDecoration: 'none', transition: 'all .15s',
@@ -40,7 +47,7 @@ export default function Navbar() {
                 background: active(to) ? 'var(--bg-elevated)' : 'transparent',
                 whiteSpace: 'nowrap',
               }}>
-                {emoji} {label}
+                {icon} {label}
               </Link>
             ))}
           </div>
@@ -49,8 +56,8 @@ export default function Navbar() {
 
           {/* Theme toggle */}
           <button onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
-            style={iconBtnStyle} title="Toggle theme">
-            {theme === 'dark' ? '☀️' : '🌙'}
+            style={{ ...iconBtnStyle, display:'flex', alignItems:'center' }} title="Toggle theme">
+            {theme === 'dark' ? <IconSun size={16} color="var(--txt2)" /> : <IconMoon size={16} color="var(--txt2)" />}
           </button>
 
           {/* Profile chip — hides name on mobile via CSS */}
@@ -68,10 +75,11 @@ export default function Navbar() {
           <button className="nav-logout-btn"
             onClick={() => { logout(); navigate('/login') }}
             style={{
+              display: 'flex', alignItems: 'center', gap: 6,
               padding: '6px 12px', borderRadius: 7, background: 'transparent',
               color: 'var(--txt3)', fontSize: 13, border: '1px solid var(--border)', cursor: 'pointer',
             }}>
-            Logout
+            <IconLogout size={14} color="var(--txt3)" /> Logout
           </button>
 
           {/* Hamburger — shown only on mobile via CSS */}
@@ -128,7 +136,7 @@ export default function Navbar() {
             <div style={{ height: 1, background: 'var(--border)', marginBottom: 4 }} />
 
             {/* Nav links */}
-            {links.map(({ to, emoji, label }) => (
+            {links.map(({ to, icon, label }) => (
               <Link key={to} to={to} onClick={close} style={{
                 display: 'flex', alignItems: 'center', gap: 10,
                 padding: '12px 10px', borderRadius: 9,
@@ -137,7 +145,7 @@ export default function Navbar() {
                 color:      active(to) ? 'var(--txt1)'        : 'var(--txt2)',
                 background: active(to) ? 'var(--bg-elevated)' : 'transparent',
               }}>
-                <span style={{ fontSize: 18, width: 24, textAlign: 'center' }}>{emoji}</span>
+                <span style={{ width: 24, display:'flex', alignItems:'center', justifyContent:'center' }}>{icon}</span>
                 {label}
               </Link>
             ))}
@@ -148,7 +156,9 @@ export default function Navbar() {
               fontSize: 15, fontWeight: 500, textDecoration: 'none', color: 'var(--txt2)',
               background: active('/profile') ? 'var(--bg-elevated)' : 'transparent',
             }}>
-              <span style={{ fontSize: 18, width: 24, textAlign: 'center' }}>👤</span>
+              <span style={{ width: 24, display:'flex', alignItems:'center', justifyContent:'center' }}>
+                <IconProfile size={18} color="var(--txt2)" />
+              </span>
               Profile & Settings
             </Link>
 
@@ -163,8 +173,8 @@ export default function Navbar() {
                 fontSize: 15, fontWeight: 500, background: 'none',
                 border: 'none', color: 'var(--txt2)', cursor: 'pointer', textAlign: 'left',
               }}>
-              <span style={{ fontSize: 18, width: 24, textAlign: 'center' }}>
-                {theme === 'dark' ? '☀️' : '🌙'}
+              <span style={{ width: 24, display:'flex', alignItems:'center', justifyContent:'center' }}>
+                {theme === 'dark' ? <IconSun size={18} color="var(--txt2)" /> : <IconMoon size={18} color="var(--txt2)" />}
               </span>
               {theme === 'dark' ? 'Switch to Light' : 'Switch to Dark'}
             </button>
@@ -180,7 +190,9 @@ export default function Navbar() {
                 border: '1px solid rgba(255,92,106,.2)',
                 color: 'var(--danger)',
               }}>
-              <span style={{ fontSize: 18, width: 24, textAlign: 'center' }}>🚪</span>
+              <span style={{ width: 24, display:'flex', alignItems:'center', justifyContent:'center' }}>
+                <IconLogout size={18} color="var(--danger)" />
+              </span>
               Logout
             </button>
           </div>

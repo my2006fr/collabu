@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import { login } from '../services/api'
 import { useAuth } from '../services/AuthContext'
 import { FormGroup, Input, Button, Alert } from '../components/FormComponents'
+import { IconHexLogo } from '../components/Icons'
 
 export default function Login() {
   const { storeAuth } = useAuth()
@@ -23,7 +24,9 @@ export default function Login() {
     <div style={S.page}>
       <div style={S.box} className="fade-up">
         <div style={{textAlign:'center',marginBottom:28}}>
-          <div style={{fontSize:38,color:'var(--accent)'}}>⬡</div>
+          <div style={{display:'flex',justifyContent:'center',marginBottom:6}}>
+            <IconHexLogo size={42} color="var(--accent)" />
+          </div>
           <h1 style={{fontFamily:'var(--font-d)',fontSize:26,fontWeight:800,marginTop:6}}>Welcome back</h1>
           <p style={{color:'var(--txt2)',fontSize:13,marginTop:4}}>Sign in with your university account</p>
         </div>

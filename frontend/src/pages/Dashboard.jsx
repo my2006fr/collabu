@@ -5,6 +5,7 @@ import { useAuth } from '../services/AuthContext'
 import Spinner from '../components/Spinner'
 import { Button, Alert, Avatar, Badge } from '../components/FormComponents'
 import SkillBadges from '../components/SkillBadges'
+import { IconSearch, IconRocket } from '../components/Icons'
 
 const METHOD_COLOR = { Scrum:'accent', Agile:'info', Kanban:'success', Waterfall:'warning', XP:'danger', Lean:'muted', Other:'muted' }
 
@@ -36,7 +37,7 @@ export default function Dashboard() {
         <div style={{display:'flex',justifyContent:'space-between',alignItems:'flex-start',marginBottom:24,flexWrap:'wrap',gap:12}}>
           <div>
             <h1 style={{fontFamily:'var(--font-d)',fontSize:'clamp(22px,5vw,30px)',fontWeight:800}}>Projects</h1>
-            <p style={{color:'var(--txt2)',fontSize:14,marginTop:3}}>Hey {user?.name?.split(' ')[0]} 👋 — discover or start a collaboration</p>
+            <p style={{color:'var(--txt2)',fontSize:14,marginTop:3}}>Hey {user?.name?.split(' ')[0]} — discover or start a collaboration</p>
           </div>
           <Button onClick={()=>navigate('/projects/new')}>+ New Project</Button>
         </div>
@@ -76,7 +77,9 @@ export default function Dashboard() {
 
         {!loading && !error && filtered.length===0 && (
           <div style={{textAlign:'center',padding:60}}>
-            <div style={{fontSize:44,marginBottom:12}}>🔭</div>
+            <div style={{display:'flex',justifyContent:'center',marginBottom:12}}>
+              <IconSearch size={44} color="var(--txt3)" />
+            </div>
             <p style={{color:'var(--txt2)'}}>{search?'No matching projects.':'No projects yet — create one!'}</p>
             {!search && <Button onClick={()=>navigate('/projects/new')} style={{marginTop:16}}>Create First Project</Button>}
           </div>
