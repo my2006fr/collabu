@@ -6,6 +6,8 @@ from flask_jwt_extended import (
 from models import db
 from models.user import User
 from services.auth_service import hash_password, check_password, is_allowed_email
+from services.notification_service import notify
+from models.notification import NOTIF_ONBOARDING
 import re
 
 auth_bp = Blueprint("auth", __name__)
@@ -21,6 +23,7 @@ def validate_password(pw: str):
     if not re.search(r'\d', pw):
         return False, "Password must contain at least one number."
     return True, ""
+
 
 @auth_bp.route("/register", methods=["POST"])
 def register():
@@ -55,6 +58,20 @@ def register():
     db.session.add(user)
     db.session.commit()
 
+    # ── Onboarding notification ───────────────────────────────────────────────
+    # Sent immediately after registration to guide the new user.
+    # Also re-checked on login (see below) in case they dismissed it without acting.
+    notify(
+        user_id=user.id,
+        type=NOTIF_ONBOARDING,
+        title=f"Welcome, {name}! 👋 Let's set up your profile",
+        body=(
+            "Connect your GitHub account to unlock collaboration features. "
+            "Head to Getting Started to complete your profile."
+        ),
+        link="/getting-started",
+    )
+
     access  = create_access_token(identity=str(user.id))
     refresh = create_refresh_token(identity=str(user.id))
     return jsonify({"token": access, "refresh_token": refresh, "user": user.to_dict()}), 201
@@ -72,6 +89,26 @@ def login():
     user = User.query.filter_by(email=email).first()
     if not user or not check_password(password, user.password_hash):
         return jsonify({"error": "Invalid email or password."}), 401
+
+    # ── Re-nudge if GitHub still not linked ───────────────────────────────────
+    # Only send once per login session — check if there's already an unread
+    # onboarding notification so we don't spam the user.
+    if not user.github_username:
+        from models.notification import Notification, NOTIF_ONBOARDING
+        has_unread_onboarding = Notification.query.filter_by(
+            user_id=user.id, type=NOTIF_ONBOARDING, is_read=False
+        ).first()
+        if not has_unread_onboarding:
+            notify(
+                user_id=user.id,
+                type=NOTIF_ONBOARDING,
+                title="Your GitHub account isn't linked yet",
+                body=(
+                    "Link your GitHub to collaborate on projects, "
+                    "push code, and appear in search. It only takes a minute!"
+                ),
+                link="/getting-started",
+            )
 
     access  = create_access_token(identity=str(user.id))
     refresh = create_refresh_token(identity=str(user.id))

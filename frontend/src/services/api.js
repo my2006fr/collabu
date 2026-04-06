@@ -85,3 +85,8 @@ export const markRead          = id         => fetch(`${BASE}/notifications/${id
 export const markAllRead       = ()         => fetch(`${BASE}/notifications/read-all`,     { method:'PATCH',  headers:hdrs() }).then(ok)
 export const deleteNotification= id         => fetch(`${BASE}/notifications/${id}`,        { method:'DELETE', headers:hdrs() }).then(ok)
 export const clearNotifications= ()         => fetch(`${BASE}/notifications`,              { method:'DELETE', headers:hdrs() }).then(ok)
+
+// ── Web Push ───────────────────────────────────────────────────────────────────
+export const getVapidPublicKey = ()    => fetch(`${BASE}/push/vapid-public-key`, { headers: hdrs() }).then(ok)
+export const subscribePush     = (sub) => fetch(`${BASE}/push/subscribe`,   { method: 'POST',   headers: hdrs(), body: JSON.stringify({ subscription: sub }) }).then(ok)
+export const unsubscribePush   = (ep)  => fetch(`${BASE}/push/unsubscribe`, { method: 'DELETE', headers: hdrs(), body: JSON.stringify({ endpoint: ep }) }).then(ok)

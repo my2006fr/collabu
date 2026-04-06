@@ -21,6 +21,7 @@ from routes.chat         import chat_bp
 from routes.posts        import posts_bp
 from routes.global_posts import gp_bp
 from routes.notifications import notifications_bp
+from routes.push          import push_bp
 
 import cloudinary
 
@@ -104,7 +105,7 @@ def create_app():
 
     # ── Blueprints ────────────────────────────────────────────────────────────
     for bp in [auth_bp, projects_bp, users_bp, tasks_bp,
-               github_bp, chat_bp, posts_bp, gp_bp, notifications_bp]:
+               github_bp, chat_bp, posts_bp, gp_bp, notifications_bp, push_bp]:
         app.register_blueprint(bp, url_prefix="/api")
 
     # ── Protected static file serving ─────────────────────────────────────────

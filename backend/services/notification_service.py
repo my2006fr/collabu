@@ -4,16 +4,11 @@ Notification service — the ONLY place notifications are created.
 MIGRATION PATH → microservice:
   Replace this file with an HTTP client that POSTs to your
   notification microservice.  Zero other files change.
-
-  Example swap:
-    def notify(...):
-        requests.post(NOTIF_SERVICE_URL + "/internal/notify", json={...}, ...)
-
-  The rest of the codebase calls notify() the same way.
 """
 from models import db
 from models.notification import Notification
 from socket_events import emit_notification
+from services.push_service import send_push_notification
 
 
 def notify(
@@ -25,7 +20,8 @@ def notify(
     actor_id: int = None,
 ) -> Notification:
     """
-    Create a persistent notification and push it live via Socket.IO.
+    Create a persistent notification, push it live via Socket.IO,
+    and send a Web Push notification if the user has subscribed.
 
     Args:
         user_id:  Recipient user id.
@@ -49,8 +45,13 @@ def notify(
     db.session.add(notif)
     db.session.commit()
 
-    # Push real-time to the recipient's personal room
-    # When migrating: swap this for an HTTP call to the notif microservice
+    # Real-time in-app push
     emit_notification(user_id, notif.to_dict())
+
+    # Out-of-site Web Push (if user has a push subscription)
+    try:
+        send_push_notification(user_id, title=title, body=body, link=link)
+    except Exception:
+        pass  # never let push failures break the main flow
 
     return notif

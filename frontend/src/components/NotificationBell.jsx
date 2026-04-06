@@ -1,18 +1,25 @@
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useNotifications } from '../services/NotificationContext'
 import { IconBell } from './Icons'
 import { Avatar } from './FormComponents'
+import { initPush, disablePush, isPushSubscribed, isPushSupported } from '../services/pushService'
 
 // ── Type → visual config ─────────────────────────────────────────────────────
 const TYPE_CONFIG = {
-  join_request:  { color: 'var(--accent)',  label: 'Join request',  bg: 'rgba(124,106,255,.12)' },
-  join_accepted: { color: 'var(--success)', label: 'Accepted',      bg: 'rgba(34,201,122,.12)'  },
-  join_rejected: { color: 'var(--danger)',  label: 'Declined',      bg: 'rgba(255,92,106,.12)'  },
-  task_assigned: { color: 'var(--info)',    label: 'Task assigned',  bg: 'rgba(56,189,248,.12)'  },
-  task_updated:  { color: 'var(--warning)', label: 'Task updated',   bg: 'rgba(245,166,35,.12)'  },
-  new_member:    { color: 'var(--success)', label: 'New member',     bg: 'rgba(34,201,122,.12)'  },
-  mention:       { color: 'var(--accent)',  label: 'Mention',        bg: 'rgba(124,106,255,.12)' },
+  join_request:   { color: 'var(--accent)',  label: 'Join request',   bg: 'rgba(124,106,255,.12)' },
+  join_accepted:  { color: 'var(--success)', label: 'Accepted',       bg: 'rgba(34,201,122,.12)'  },
+  join_rejected:  { color: 'var(--danger)',  label: 'Declined',       bg: 'rgba(255,92,106,.12)'  },
+  task_assigned:  { color: 'var(--info)',    label: 'Task assigned',  bg: 'rgba(56,189,248,.12)'  },
+  task_updated:   { color: 'var(--warning)', label: 'Task updated',   bg: 'rgba(245,166,35,.12)'  },
+  new_member:     { color: 'var(--success)', label: 'New member',     bg: 'rgba(34,201,122,.12)'  },
+  mention:        { color: 'var(--accent)',  label: 'Mention',        bg: 'rgba(124,106,255,.12)' },
+  // ── new types ──────────────────────────────────────────────────────────────
+  post_liked:     { color: '#f97316',        label: '❤️ Liked',       bg: 'rgba(249,115,22,.12)'  },
+  post_comment:   { color: 'var(--info)',    label: '💬 Comment',     bg: 'rgba(56,189,248,.12)'  },
+  comment_reply:  { color: 'var(--accent)',  label: '↩️ Reply',       bg: 'rgba(124,106,255,.12)' },
+  new_message:    { color: 'var(--success)', label: '✉️ Message',     bg: 'rgba(34,201,122,.12)'  },
+  onboarding:     { color: '#facc15',        label: '⭐ Get started', bg: 'rgba(250,204,21,.12)'  },
 }
 
 const cfg = (type) => TYPE_CONFIG[type] || { color: 'var(--txt2)', label: type, bg: 'var(--bg-elevated)' }
@@ -64,18 +71,24 @@ function NotifRow({ notif, onRead, onDelete, onNavigate }) {
         }} />
       )}
 
-      {/* Actor avatar */}
+      {/* Actor avatar or icon for system notifications */}
       <div style={{ flexShrink: 0, marginTop: 2 }}>
-        <Avatar
-          url={notif.actor?.avatar_url}
-          name={notif.actor?.name || '?'}
-          size={34}
-        />
+        {notif.actor ? (
+          <Avatar url={notif.actor.avatar_url} name={notif.actor.name || '?'} size={34} />
+        ) : (
+          <div style={{
+            width: 34, height: 34, borderRadius: '50%',
+            background: bg,
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+            fontSize: 16,
+          }}>
+            ⭐
+          </div>
+        )}
       </div>
 
       {/* Content */}
       <div style={{ flex: 1, minWidth: 0 }}>
-        {/* Type badge */}
         <span style={{
           fontSize: 10, fontWeight: 700, letterSpacing: '.4px',
           textTransform: 'uppercase', color,
@@ -128,6 +141,53 @@ function NotifRow({ notif, onRead, onDelete, onNavigate }) {
   )
 }
 
+// ── Push notification toggle ──────────────────────────────────────────────────
+function PushToggle() {
+  const navigate = useNavigate()
+  const [subscribed, setSubscribed] = useState(false)
+  const [loading,    setLoading]    = useState(false)
+  const supported = isPushSupported()
+
+  useEffect(() => {
+    isPushSubscribed().then(setSubscribed)
+  }, [])
+
+  if (!supported) return null
+
+  const toggle = async () => {
+    setLoading(true)
+    if (subscribed) {
+      await disablePush()
+      setSubscribed(false)
+    } else {
+      const ok = await initPush(navigate)
+      setSubscribed(ok)
+    }
+    setLoading(false)
+  }
+
+  return (
+    <button
+      onClick={toggle}
+      disabled={loading}
+      title={subscribed ? 'Disable push notifications' : 'Enable push notifications'}
+      style={{
+        display: 'flex', alignItems: 'center', gap: 5,
+        fontSize: 11, fontWeight: 600,
+        color: subscribed ? 'var(--success)' : 'var(--txt3)',
+        background: 'none', border: 'none', cursor: 'pointer',
+        padding: '3px 7px', borderRadius: 5,
+        transition: 'background .12s, color .12s',
+        opacity: loading ? 0.6 : 1,
+      }}
+      onMouseEnter={e => e.currentTarget.style.background = 'var(--bg-elevated)'}
+      onMouseLeave={e => e.currentTarget.style.background = 'none'}
+    >
+      {subscribed ? '🔔 Push on' : '🔕 Push off'}
+    </button>
+  )
+}
+
 // ── Main bell component ───────────────────────────────────────────────────────
 export default function NotificationBell() {
   const {
@@ -172,7 +232,7 @@ export default function NotificationBell() {
           position: 'relative',
           display: 'flex', alignItems: 'center', justifyContent: 'center',
           width: 36, height: 36,
-          background: open ? 'var(--bg-elevated)' : 'var(--bg-elevated)',
+          background: 'var(--bg-elevated)',
           border: `1px solid ${open ? 'var(--accent)' : 'var(--border)'}`,
           borderRadius: 8, cursor: 'pointer',
           transition: 'border-color .15s, background .15s',
@@ -213,7 +273,7 @@ export default function NotificationBell() {
             top: 'calc(100% + 8px)',
             right: 0,
             width: 360,
-            maxHeight: 520,
+            maxHeight: 540,
             background: 'var(--bg-card)',
             border: '1px solid var(--border)',
             borderRadius: 14,
@@ -248,7 +308,8 @@ export default function NotificationBell() {
               )}
             </div>
 
-            <div style={{ display: 'flex', gap: 6 }}>
+            <div style={{ display: 'flex', gap: 4, alignItems: 'center' }}>
+              <PushToggle />
               {unreadCount > 0 && (
                 <button
                   onClick={markAllRead}
@@ -327,7 +388,7 @@ export default function NotificationBell() {
             ))}
           </div>
 
-          {/* Footer — unread filter hint */}
+          {/* Footer */}
           {notifications.length > 0 && (
             <div style={{
               padding: '8px 14px',

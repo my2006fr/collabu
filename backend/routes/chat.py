@@ -4,17 +4,34 @@ from models import db
 from models.chat_message import ChatMessage
 from models.project import Project
 from models.collaboration import Collaboration
+from models.user import User
 from services.upload_service import save_file
+from services.notification_service import notify
+from models.notification import NOTIF_NEW_MESSAGE
 from socket_events import broadcast_chat_message
 from datetime import datetime
 
 chat_bp = Blueprint("chat", __name__)
+
 
 def is_member(pid, uid):
     p = Project.query.get(pid)
     if not p: return False
     if p.owner_id == uid: return True
     return bool(Collaboration.query.filter_by(project_id=pid, user_id=uid, status="accepted").first())
+
+
+def get_project_member_ids(pid):
+    """Return all user ids who are members of the project (owner + accepted collabs)."""
+    p = Project.query.get(pid)
+    if not p:
+        return []
+    member_ids = {p.owner_id}
+    collabs = Collaboration.query.filter_by(project_id=pid, status="accepted").all()
+    for c in collabs:
+        member_ids.add(c.user_id)
+    return list(member_ids)
+
 
 @chat_bp.route("/projects/<int:pid>/chat", methods=["GET"])
 @jwt_required()
@@ -29,6 +46,24 @@ def get_messages(pid):
     messages.reverse()
     return jsonify({"messages": [m.to_dict() for m in messages], "total": total,
                     "page": page, "pages": (total+per_page-1)//per_page}), 200
+
+
+def _notify_members_new_message(pid, sender_uid, body_snippet, project_title):
+    """Notify all project members (except the sender) about a new chat message."""
+    member_ids = get_project_member_ids(pid)
+    sender = User.query.get(sender_uid)
+    for uid in member_ids:
+        if uid == sender_uid:
+            continue
+        notify(
+            user_id=uid,
+            type=NOTIF_NEW_MESSAGE,
+            title=f"New message in '{project_title}'",
+            body=f"{sender.name}: {body_snippet}",
+            link=f"/projects/{pid}/chat",
+            actor_id=sender_uid,
+        )
+
 
 @chat_bp.route("/projects/<int:pid>/chat", methods=["POST"])
 @jwt_required()
@@ -47,8 +82,15 @@ def send_message(pid):
     db.session.add(msg)
     db.session.commit()
     msg_dict = msg.to_dict()
-    broadcast_chat_message(pid, msg_dict)          # ← real-time
+    broadcast_chat_message(pid, msg_dict)
+
+    # Notify other members
+    p       = Project.query.get(pid)
+    snippet = body[:80] + ("…" if len(body) > 80 else "")
+    _notify_members_new_message(pid, uid, snippet, p.title)
+
     return jsonify({"message": msg_dict}), 201
+
 
 @chat_bp.route("/projects/<int:pid>/chat/file", methods=["POST"])
 @jwt_required()
@@ -72,8 +114,16 @@ def send_file_message(pid):
     db.session.add(msg)
     db.session.commit()
     msg_dict = msg.to_dict()
-    broadcast_chat_message(pid, msg_dict)          # ← real-time
+    broadcast_chat_message(pid, msg_dict)
+
+    # Notify other members
+    p       = Project.query.get(pid)
+    display = body if body else f"📎 {info['original_name']}"
+    snippet = display[:80] + ("…" if len(display) > 80 else "")
+    _notify_members_new_message(pid, uid, snippet, p.title)
+
     return jsonify({"message": msg_dict}), 201
+
 
 @chat_bp.route("/projects/<int:pid>/chat/<int:mid>", methods=["PATCH"])
 @jwt_required()
@@ -86,6 +136,7 @@ def edit_message(pid, mid):
     msg.body = body; msg.edited_at = datetime.utcnow()
     db.session.commit()
     return jsonify({"message": msg.to_dict()}), 200
+
 
 @chat_bp.route("/projects/<int:pid>/chat/<int:mid>", methods=["DELETE"])
 @jwt_required()

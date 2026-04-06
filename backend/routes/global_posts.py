@@ -3,6 +3,10 @@ from flask_jwt_extended import jwt_required, get_jwt_identity
 from models import db
 from models.post import Post, PostFile, PostLike, PostComment
 from services.upload_service import save_file
+from services.notification_service import notify
+from models.notification import (
+    NOTIF_POST_LIKED, NOTIF_POST_COMMENT, NOTIF_COMMENT_REPLY
+)
 from datetime import datetime
 from socket_events import broadcast_global_post, broadcast_post_like, broadcast_post_comment
 
@@ -50,7 +54,7 @@ def create_post():
     db.session.commit()
     result = post.to_dict(current_user_id=uid)
     if errors: result["warnings"] = errors
-    broadcast_global_post(result)   # ← real-time
+    broadcast_global_post(result)
     return jsonify({"post": result}), 201
 
 # ── Edit / delete ─────────────────────────────────────────────────────────────
@@ -85,16 +89,34 @@ def delete_post(pid):
 @gp_bp.route("/feed/<int:pid>/like", methods=["POST"])
 @jwt_required()
 def toggle_like(pid):
-    uid  = int(get_jwt_identity())
+    uid      = int(get_jwt_identity())
     existing = PostLike.query.filter_by(post_id=pid, user_id=uid).first()
+    post     = Post.query.get_or_404(pid)
+
     if existing:
         db.session.delete(existing)
         db.session.commit()
         return jsonify({"liked": False}), 200
+
     db.session.add(PostLike(post_id=pid, user_id=uid))
     db.session.commit()
-    post2 = Post.query.get(pid)
-    broadcast_post_like(pid, len(post2.likes), uid)
+
+    broadcast_post_like(pid, len(post.likes), uid)
+
+    # Notify the post author (not if they liked their own post)
+    if post.user_id != uid:
+        from models.user import User
+        liker = User.query.get(uid)
+        snippet = post.body[:60] + ("…" if len(post.body) > 60 else "")
+        notify(
+            user_id=post.user_id,
+            type=NOTIF_POST_LIKED,
+            title=f"{liker.name} liked your post",
+            body=f'"{snippet}"',
+            link="/feed",
+            actor_id=uid,
+        )
+
     return jsonify({"liked": True}), 200
 
 # ── Comments ──────────────────────────────────────────────────────────────────
@@ -113,10 +135,41 @@ def add_comment(pid):
     d    = request.get_json()
     body = (d.get("body") or "").strip()
     if not body: return jsonify({"error": "Body required."}), 400
-    c = PostComment(post_id=pid, user_id=uid, body=body, parent_id=d.get("parent_id"))
+
+    parent_id = d.get("parent_id")
+    c = PostComment(post_id=pid, user_id=uid, body=body, parent_id=parent_id)
     db.session.add(c)
     db.session.commit()
     broadcast_post_comment(pid, c.to_dict())
+
+    from models.user import User
+    commenter = User.query.get(uid)
+    post      = Post.query.get(pid)
+    snippet   = body[:80] + ("…" if len(body) > 80 else "")
+
+    if parent_id:
+        # Reply to a comment — notify the parent comment author
+        parent = PostComment.query.get(parent_id)
+        if parent and parent.user_id != uid:
+            notify(
+                user_id=parent.user_id,
+                type=NOTIF_COMMENT_REPLY,
+                title=f"{commenter.name} replied to your comment",
+                body=snippet,
+                link="/feed",
+                actor_id=uid,
+            )
+    elif post and post.user_id != uid:
+        # Top-level comment — notify the post author
+        notify(
+            user_id=post.user_id,
+            type=NOTIF_POST_COMMENT,
+            title=f"{commenter.name} commented on your post",
+            body=snippet,
+            link="/feed",
+            actor_id=uid,
+        )
+
     return jsonify({"comment": c.to_dict()}), 201
 
 @gp_bp.route("/feed/comments/<int:cid>", methods=["DELETE"])
