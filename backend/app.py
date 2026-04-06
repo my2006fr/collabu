@@ -1,11 +1,14 @@
 from gevent import monkey
 monkey.patch_all()
 
+# ── Load .env FIRST — before any module that reads os.getenv() at import time ──
+from dotenv import load_dotenv
+load_dotenv()
+
 from flask import Flask, send_from_directory, jsonify, abort
 from flask_cors import CORS
 from flask_jwt_extended import JWTManager, verify_jwt_in_request
 from flask_jwt_extended.exceptions import NoAuthorizationError
-from dotenv import load_dotenv
 from datetime import timedelta
 from flask_migrate import Migrate
 import os
@@ -24,8 +27,6 @@ from routes.notifications import notifications_bp
 from routes.push          import push_bp
 
 import cloudinary
-
-load_dotenv()
 migrate = Migrate()
 def create_app():
     app = Flask(__name__)
