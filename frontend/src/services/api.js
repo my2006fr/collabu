@@ -74,3 +74,14 @@ export const toggleLike       = id       => fetch(`${BASE}/feed/${id}/like`,    
 export const getFeedComments  = id       => fetch(`${BASE}/feed/${id}/comments`,      { headers:hdrs() }).then(ok)
 export const addFeedComment   = (id,p)   => fetch(`${BASE}/feed/${id}/comments`,     { method:'POST', headers:hdrs(), body:JSON.stringify(p) }).then(ok)
 export const deleteFeedComment= id       => fetch(`${BASE}/feed/comments/${id}`,     { method:'DELETE', headers:hdrs() }).then(ok)
+
+// ── Notifications ─────────────────────────────────────────────────────────────
+export const getNotifications  = (p={}) => {
+  const q = new URLSearchParams(p).toString()
+  return fetch(`${BASE}/notifications${q ? '?'+q : ''}`, { headers:hdrs() }).then(ok)
+}
+export const getUnreadCount    = ()         => fetch(`${BASE}/notifications/unread-count`, { headers:hdrs() }).then(ok)
+export const markRead          = id         => fetch(`${BASE}/notifications/${id}/read`,   { method:'PATCH',  headers:hdrs() }).then(ok)
+export const markAllRead       = ()         => fetch(`${BASE}/notifications/read-all`,     { method:'PATCH',  headers:hdrs() }).then(ok)
+export const deleteNotification= id         => fetch(`${BASE}/notifications/${id}`,        { method:'DELETE', headers:hdrs() }).then(ok)
+export const clearNotifications= ()         => fetch(`${BASE}/notifications`,              { method:'DELETE', headers:hdrs() }).then(ok)

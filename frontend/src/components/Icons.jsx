@@ -500,3 +500,20 @@ export const IconInfoFilled = icon(c => (
     <line x1="12" y1="16" x2="12.01" y2="16" stroke={c} strokeWidth="3" strokeLinecap="round"/>
   </>
 ));
+
+/** 🔔 Bell */
+export const IconBell = icon(c => (
+  <>
+    <path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9" stroke={c} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" fill="none"/>
+    <path d="M13.73 21a2 2 0 01-3.46 0" stroke={c} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" fill="none"/>
+  </>
+));
+
+/** 🔔 Bell with dot */
+export const IconBellDot = icon(c => (
+  <>
+    <path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9" stroke={c} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" fill="none"/>
+    <path d="M13.73 21a2 2 0 01-3.46 0" stroke={c} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" fill="none"/>
+    <circle cx="18" cy="5" r="3" fill="var(--danger)" stroke="none"/>
+  </>
+));

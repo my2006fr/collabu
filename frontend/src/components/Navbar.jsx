@@ -4,6 +4,7 @@ import { useAuth } from '../services/AuthContext'
 import { useTheme } from '../services/ThemeContext'
 import { useLanguage } from '../services/LanguageContext'
 import { Avatar } from './FormComponents'
+import NotificationBell from './NotificationBell'
 import {
   IconHexLogo, IconFeed, IconProjects, IconGuide,
   IconProfile, IconSun, IconMoon, IconLogout,
@@ -61,6 +62,9 @@ export default function Navbar() {
             style={{ ...iconBtnStyle, display:'flex', alignItems:'center' }} title="Toggle theme">
             {theme === 'dark' ? <IconSun size={16} color="var(--txt2)" /> : <IconMoon size={16} color="var(--txt2)" />}
           </button>
+
+          {/* Notifications bell */}
+          <NotificationBell />
 
           {/* Profile chip — hides name on mobile via CSS */}
           <Link to="/profile" style={profileChipStyle} onClick={close}>

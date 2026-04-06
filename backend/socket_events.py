@@ -3,6 +3,11 @@ Flask-SocketIO event handlers.
 Rooms:
   - project_{pid}  : real-time chat + join-request notifications
   - global_feed    : global post notifications
+  - user_{uid}     : personal room — real-time notifications per user
+
+MIGRATION PATH → notification microservice:
+  emit_notification() is the ONLY function that needs to change.
+  Swap it to an HTTP/Redis publish and nothing else breaks.
 """
 from flask_socketio import SocketIO, join_room, leave_room, emit
 from flask_jwt_extended import decode_token
@@ -26,6 +31,8 @@ def on_connect(auth):
     user_id = _user_id_from_token(token)
     if not user_id:
         return False   # reject unauthenticated connections
+    # Auto-join personal notification room on connect
+    join_room(f"user_{user_id}")
     emit("connected", {"user_id": user_id})
 
 @socketio.on("join_project_room")
@@ -67,3 +74,11 @@ def broadcast_post_comment(post_id, comment_dict):
     socketio.emit("new_post_comment",
                   {"post_id": post_id, "comment": comment_dict},
                   room="global_feed")
+
+# ── Notification (personal room) ──────────────────────────────────────────────
+# MIGRATION PATH: when moving to a microservice, replace this function body
+# with a Redis publish / HTTP call. Signature stays identical.
+
+def emit_notification(user_id: int, notif_dict: dict):
+    """Push a notification to a specific user's personal Socket.IO room."""
+    socketio.emit("new_notification", notif_dict, room=f"user_{user_id}")

@@ -12,6 +12,11 @@ from services.github_service import add_collaborator
 from services.encryption import decrypt
 from socket_events import broadcast_join_request
 from services.upload_service import save_file
+from services.notification_service import notify
+from models.notification import (
+    NOTIF_JOIN_REQUEST, NOTIF_JOIN_ACCEPTED,
+    NOTIF_JOIN_REJECTED, NOTIF_NEW_MEMBER,
+)
 
 projects_bp = Blueprint("projects", __name__)
 
@@ -113,6 +118,16 @@ def join_project(pid):
     db.session.commit()
     broadcast_join_request(pid, collab.to_dict())   # ← real-time notify owner
 
+    # Notify the project owner about the join request
+    notify(
+        user_id=p.owner_id,
+        type=NOTIF_JOIN_REQUEST,
+        title=f"{user.name} wants to join '{p.title}'",
+        body=f"Matched skills: {', '.join(matched)}" if matched else "No skill overlap — review their profile.",
+        link=f"/projects/{pid}",
+        actor_id=uid,
+    )
+
     # Immediately try to add to GitHub as pending collaborator invite
     # Uses the owner's PAT
     owner    = User.query.get(p.owner_id)
@@ -158,9 +173,29 @@ def accept_request(pid):
                 if gh_result["ok"]:
                     collab.github_added = True
         db.session.commit()
+
+        # Notify the accepted collaborator
+        notify(
+            user_id=target_uid,
+            type=NOTIF_JOIN_ACCEPTED,
+            title=f"You're in! Welcome to '{p.title}'",
+            body="Your join request was accepted. Head to the project to get started.",
+            link=f"/projects/{pid}",
+            actor_id=owner_uid,
+        )
         return jsonify({"message": "Accepted.", "collaboration": collab.to_dict(), "github": gh_result}), 200
     elif action == "reject":
         collab.status = "rejected"
         db.session.commit()
+
+        # Notify the rejected collaborator
+        notify(
+            user_id=target_uid,
+            type=NOTIF_JOIN_REJECTED,
+            title=f"Update on your request for '{p.title}'",
+            body="The project owner has reviewed your request.",
+            link=f"/projects/{pid}",
+            actor_id=owner_uid,
+        )
         return jsonify({"message": "Rejected.", "collaboration": collab.to_dict()}), 200
     return jsonify({"error": "Invalid action."}), 400

@@ -9,3 +9,4 @@ from models.task_comment  import TaskComment
 from models.chat_message  import ChatMessage
 from models.project_post  import ProjectPost, PostAttachment
 from models.post          import Post, PostFile, PostLike, PostComment
+from models.notification  import Notification

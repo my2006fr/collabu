@@ -6,6 +6,8 @@ from models.task_comment import TaskComment
 from models.project import Project
 from models.collaboration import Collaboration
 from models.user import User
+from services.notification_service import notify
+from models.notification import NOTIF_TASK_ASSIGNED, NOTIF_TASK_UPDATED
 
 tasks_bp = Blueprint("tasks", __name__)
 
@@ -73,6 +75,18 @@ def create_task(pid):
         except: pass
     db.session.add(task)
     db.session.commit()
+
+    # Notify the assignee (if not the creator)
+    if assignee_id and assignee_id != uid:
+        notify(
+            user_id=assignee_id,
+            type=NOTIF_TASK_ASSIGNED,
+            title=f"New task assigned to you: '{title}'",
+            body=f"In project {p.title}. Priority: {d.get('priority','medium')}.",
+            link=f"/projects/{pid}/board",
+            actor_id=uid,
+        )
+
     return jsonify({"task": task.to_dict()}), 201
 
 # ── UPDATE task ───────────────────────────────────────────────────────────────
@@ -109,7 +123,18 @@ def update_task(pid, tid):
                 Collaboration.query.filter_by(project_id=pid, user_id=aid, status="accepted").first())
             if not valid:
                 return jsonify({"error": "Assignee is not a project member."}), 400
+        old_assignee = task.assignee_id
         task.assignee_id = aid
+        # Notify new assignee if they changed
+        if aid and aid != old_assignee and aid != uid:
+            notify(
+                user_id=aid,
+                type=NOTIF_TASK_ASSIGNED,
+                title=f"Task assigned to you: '{task.title}'",
+                body=f"In project {p.title}.",
+                link=f"/projects/{pid}/board",
+                actor_id=uid,
+            )
     if "due_date" in d and is_owner:
         from datetime import datetime
         try: task.due_date = datetime.fromisoformat(d["due_date"]) if d["due_date"] else None

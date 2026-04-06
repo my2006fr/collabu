@@ -2,6 +2,7 @@ import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import { AuthProvider, useAuth } from './services/AuthContext'
 import { ThemeProvider } from './services/ThemeContext'
 import { LanguageProvider } from './services/LanguageContext'
+import { NotificationProvider } from './services/NotificationContext'
 import Navbar          from './components/Navbar'
 import Spinner         from './components/Spinner'
 import Login           from './pages/Login'
@@ -60,9 +61,11 @@ export default function App() {
     <AuthProvider>
       <ThemeProvider>
         <LanguageProvider>
-          <BrowserRouter>
-            <AppRoutes />
-          </BrowserRouter>
+          <NotificationProvider>
+            <BrowserRouter>
+              <AppRoutes />
+            </BrowserRouter>
+          </NotificationProvider>
         </LanguageProvider>
       </ThemeProvider>
     </AuthProvider>
