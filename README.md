@@ -290,3 +290,9 @@ PUT /repos/alice/my-project/collaborators/their-username
 1. Build: `npm run build` → deploy `dist/`
 2. Set env var: `VITE_API_URL=https://your-backend.com`
 3. Update `vite.config.js` or use env var in `api.js` for production base URL
+
+
+### Test it live ⚡✅↗
+| Name    |   URL                      |
+|---------|----------------------------|
+| CollabU | https://collabu.vercel.app/|
